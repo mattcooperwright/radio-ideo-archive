@@ -14,3 +14,10 @@ The brand typeface is FH Oscar, loaded from
 `'FH Oscar Test', 'Manrope', sans-serif`. That package also contains
 FH Oscar Condensed: do not use the Condensed faces.
 Read `brand/typography.md` before setting any type.
+
+## Firebase
+
+The Firebase project ID is `radio-ideo-archive` (project number
+1028299641494, under the ideo.com Google Cloud organisation). `.firebaserc`
+sets it as the default, so Firebase CLI commands run from the repo root
+target it without `--project`.
