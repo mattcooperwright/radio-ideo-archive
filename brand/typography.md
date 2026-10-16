@@ -32,13 +32,14 @@ body {
 }
 ```
 
-Use the standard family name `'FH Oscar Test'` in CSS. Don't reference any
-family name containing "Condensed".
+The stylesheet registers two families:
 
-The family name hasn't been checked against the stylesheet yet. The first
-time you build a page, open the stylesheet URL above and confirm the
-`font-family` values in its `@font-face` blocks. If the standard family is
-registered under a different name, use that name and update this file.
+| Family name                 | Use it?               |
+| --------------------------- | --------------------- |
+| `'FH Oscar Test'`           | Yes, for all text     |
+| `'FH Oscar Condensed Test'` | No, ignore            |
+
+Never reference `'FH Oscar Condensed Test'`.
 
 In React, inject the same `<link>` into `document.head` once (for example in a
 `useEffect`) before rendering text, or add it to `public/index.html`.
