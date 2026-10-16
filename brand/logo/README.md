@@ -5,7 +5,8 @@ directly rather than redrawing the mark.
 
 ## The mark
 
-The logo is the word **Radio** set in a bold grotesque, followed by four
+The logo is the word **Radio** set in FH Oscar (see `../typography.md`) and
+drawn as outlines, followed by four
 glyphs that spell IDEO as transport-control shapes:
 
 | Letter | Glyph            |
