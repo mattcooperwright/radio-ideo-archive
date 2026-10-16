@@ -1,0 +1,24 @@
+# Firebase App Hosting config. https://firebase.google.com/docs/app-hosting/configure
+runConfig:
+  minInstances: 0
+  maxInstances: 3
+  concurrency: 40
+
+env:
+  - variable: ROOT_FOLDER_ID
+    value: 1hyRAVgvqCXum2z7IElo3Nqx9ChB-TtCZ
+    availability: [RUNTIME]
+
+  # Firebase web app config (Project settings → Your apps). These are public identifiers, not secrets.
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    value: REPLACE_ME
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    value: REPLACE_ME.firebaseapp.com
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: REPLACE_ME
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+    value: REPLACE_ME
+    availability: [BUILD, RUNTIME]
