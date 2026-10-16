@@ -108,7 +108,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       title: current.title,
       artist: current.series,
       album: 'Radio IDEO',
-      artwork: [{ src: current.cover }],
+      artwork: [{ src: current.cover || '/brand/radio-ideo-stacked-lime.png', sizes: '568x568', type: current.cover ? undefined : 'image/png' }],
     });
     navigator.mediaSession.setActionHandler('play', () => void audioRef.current?.play());
     navigator.mediaSession.setActionHandler('pause', () => audioRef.current?.pause());

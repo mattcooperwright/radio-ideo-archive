@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Cover } from '@/components/Cover';
 import { PlayButton } from '@/components/PlayButton';
 import { ShowBrowser } from '@/components/ShowBrowser';
 import { getCatalogue } from '@/lib/drive';
@@ -14,7 +15,7 @@ export default async function Home() {
     <>
       {latest && (
         <section className="hero">
-          <img src={latest.cover} alt="" className="hero__art" />
+          <Cover name={latest.series} slug={latest.seriesSlug} src={latest.cover} colour={latest.colour} className="hero__art" />
           <div className="hero__body">
             <p className="eyebrow">Latest show</p>
             <h1 className="hero__title">

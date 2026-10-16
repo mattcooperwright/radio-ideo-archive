@@ -2,21 +2,25 @@
   "shufflemode": {
     "name": "ShuffleMode",
     "blurb": "",
-    "cover": ""
+    "cover": "",
+    "colour": "lime"
   },
   "inthezone": {
     "name": "In the Zone",
     "blurb": "",
-    "cover": ""
+    "cover": "",
+    "colour": "white"
   },
   "fridayshow": {
     "name": "Friday Show",
     "blurb": "",
-    "cover": ""
+    "cover": "",
+    "colour": "grey"
   },
   "radioideo": {
     "name": "Radio IDEO",
     "blurb": "",
-    "cover": ""
+    "cover": "",
+    "colour": "black"
   }
 }

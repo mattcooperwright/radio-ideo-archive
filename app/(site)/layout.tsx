@@ -10,7 +10,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
     <PlayerProvider>
       <header className="header">
         <Link href="/" className="header__logo" aria-label="Radio IDEO home">
-          <img src="/brand/logo.svg" alt="Radio IDEO" />
+          <img src="/brand/radio-ideo-wordmark-white.svg" alt="Radio IDEO" width="430" height="92" />
         </Link>
         <div className="header__user">
           <span className="header__email">{user.email}</span>

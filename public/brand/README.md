@@ -1,13 +1,12 @@
-# Brand assets
+# Served brand files
 
-Drop the Radio IDEO graphics here and commit. Replacing a file with the same name is all it takes.
+These are copies of files in `brand/logo/`, which is the source of truth (see `brand/logo/README.md` and `brand/typography.md`). Next.js only serves files from `public/`, so the site uses these copies. If the logo changes, update `brand/logo/` and copy the new file here.
 
-| File | Used for | Notes |
-| --- | --- | --- |
-| `logo.svg` | Header, login page, favicon | SVG preferred. Wide format, roughly 5:1. A PNG works too; update the `src` in `app/(site)/layout.tsx` and `app/login/page.tsx`. |
-| `default-cover.svg` | Cover art for any show without series art | Square. If you use a PNG/JPG, update `DEFAULT_COVER` in `lib/catalogue.ts`. |
-| `series/<slug>.jpg` | Per-series cover art | Square, at least 600×600. Point to it from `content/series.json`. |
+| File | Used for |
+| --- | --- |
+| `radio-ideo-wordmark-white.svg` | Header logo on the black page |
+| `radio-ideo-wordmark-black.svg` | Spare, for light backgrounds |
+| `radio-ideo-stacked-lime.png` | Login page, favicon, home-screen icon, lock-screen artwork when a show has no cover |
+| `series/<slug>.jpg` | Optional per-series cover art, referenced from `content/series.json` |
 
-Colours and fonts live as tokens at the top of `app/globals.css` (`--color-accent`, `--color-bg`, `--font-display`, …). For a custom font, put the files in `public/brand/fonts/` and add an `@font-face` rule there.
-
-The current files are placeholders.
+Shows without cover art get a generated tile in the style of the stacked lockup: the series name in FH Oscar above the four IDEO glyphs. Each series has a colourway (`lime`, `white`, `grey` or `black`) set in `content/series.json`.

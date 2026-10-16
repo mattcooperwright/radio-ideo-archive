@@ -57,7 +57,7 @@ async function fetchAudioFiles(): Promise<DriveFile[]> {
 
 export const getCatalogue: () => Promise<Catalogue> = unstable_cache(
   async () => buildCatalogue(await fetchAudioFiles(), seriesConfig as SeriesConfig, overrides as Overrides),
-  ['catalogue-v2'],
+  ['catalogue-v4'],
   { revalidate: CATALOGUE_TTL_SECONDS },
 );
 

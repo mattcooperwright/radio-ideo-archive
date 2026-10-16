@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildCatalogue, DEFAULT_COVER, type DriveFile } from './catalogue';
+import { buildCatalogue, type DriveFile } from './catalogue';
 
 const files: DriveFile[] = [
   { id: 'a', name: 'ShuffleMode - 2026-07-22 21-39-41.m4a', mimeType: 'audio/x-m4a', size: '100', createdTime: '2026-07-23T08:22:30Z' },
@@ -13,7 +13,7 @@ describe('buildCatalogue', () => {
     expect(cat.shows.map((s) => s.id)).toEqual(['c', 'a', 'b']);
     expect(cat.series[0]).toMatchObject({ slug: 'shufflemode', name: 'ShuffleMode', count: 2 });
     expect(cat.shows.find((s) => s.id === 'b')).toMatchObject({ series: 'ShuffleMode', year: 2022, cover: '/brand/series/s.jpg' });
-    expect(cat.shows.find((s) => s.id === 'c')).toMatchObject({ cover: DEFAULT_COVER, description: 'Drive notes', title: 'Fri, 24 Jul 2026', titleIsDate: true });
+    expect(cat.shows.find((s) => s.id === 'c')).toMatchObject({ cover: '', description: 'Drive notes', title: 'Fri, 24 Jul 2026', titleIsDate: true });
     expect(cat.years).toEqual([2026, 2022]);
   });
 

@@ -10,11 +10,12 @@ Keyed by series slug: the series name lowercased with spaces and punctuation rem
 "shufflemode": {
   "name": "ShuffleMode",
   "blurb": "One line shown on the series page.",
-  "cover": "/brand/series/shufflemode.jpg"
+  "cover": "/brand/series/shufflemode.jpg",
+  "colour": "lime"
 }
 ```
 
-`cover` points at a file under `public/`. Leave it empty to use the default cover.
+`cover` points at a file under `public/`. Leave it empty to use a generated cover: the series name over the IDEO glyphs, in the series' `colour` (`lime`, `white`, `grey` or `black`). A new series with no entry gets a colour picked from its name.
 
 ## overrides.json
 

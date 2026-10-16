@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { Cover } from '@/components/Cover';
 import { PlayButton } from '@/components/PlayButton';
 import { ShowCard } from '@/components/ShowCard';
 import { getCatalogue } from '@/lib/drive';
@@ -18,7 +19,7 @@ export default async function ShowPage({ params }: { params: Promise<{ id: strin
   return (
     <>
       <section className="hero">
-        <img src={show.cover} alt="" className="hero__art" />
+        <Cover name={show.series} slug={show.seriesSlug} src={show.cover} colour={show.colour} className="hero__art" />
         <div className="hero__body">
           <p className="eyebrow">
             <Link href={`/series/${show.seriesSlug}`}>{show.series}</Link>

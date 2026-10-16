@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { formatShowDate } from '@/lib/parseShow';
 import type { Show } from '@/lib/types';
+import { Cover } from './Cover';
+import { NowPlaying } from './NowPlaying';
 import { PlayButton } from './PlayButton';
 
 export function ShowCard({ show }: { show: Show }) {
@@ -8,7 +10,8 @@ export function ShowCard({ show }: { show: Show }) {
     <article className="card">
       <Link href={`/shows/${show.id}`} className="card__link">
         <div className="card__art">
-          <img src={show.cover} alt="" loading="lazy" />
+          <Cover name={show.series} slug={show.seriesSlug} src={show.cover} colour={show.colour} />
+          <NowPlaying id={show.id} />
           <PlayButton show={show} />
         </div>
         <h3 className="card__title">{show.title}</h3>

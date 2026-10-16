@@ -12,6 +12,8 @@ export type Show = {
   size: number;
   description: string;
   cover: string;
+  /** Brand colourway for the generated cover: lime, white, grey or black. */
+  colour: string;
 };
 
 export type Series = {
@@ -19,6 +21,7 @@ export type Series = {
   name: string;
   blurb: string;
   cover: string;
+  colour: string;
   count: number;
 };
 

@@ -11,7 +11,9 @@ A small private site where anyone with an `@ideo.com` Google account can sign in
 
 ## Branding
 
-Put logos and cover art in `public/brand/` (the current ones are placeholders). `public/brand/README.md` lists the filenames, and the colour and font tokens are at the top of `app/globals.css`.
+The brand lives in `brand/` (logo files, colours, typography notes). The site uses black, white, lime `#D9FF00` and grey `#D9D9D9`, set as tokens at the top of `app/globals.css`, and the player controls are drawn from the logo's own glyphs. `public/brand/README.md` explains which files are served.
+
+Type is FH Oscar, loaded from cdnfonts as described in `brand/typography.md`, with Manrope as the fallback. That package is published as a test release. If IDEO has licensed FH Oscar web fonts, put the files in `public/brand/fonts/`, add an `@font-face` for `'FH Oscar Test'` in `app/globals.css` and drop the cdnfonts `<link>` from `app/layout.tsx`.
 
 ## Local development
 

@@ -10,7 +10,7 @@ export default async function LoginPage() {
   return (
     <main className="login">
       <div className="login__card">
-        <img src="/brand/logo.svg" alt="Radio IDEO" className="login__logo" />
+        <img src="/brand/radio-ideo-stacked-lime.png" alt="Radio IDEO" width="568" height="568" className="login__logo" />
         <p className="login__lede">Every show, on demand. For IDEO people.</p>
         <LoginButton mock={MOCK_AUTH} />
       </div>

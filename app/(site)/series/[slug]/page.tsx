@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { Cover } from '@/components/Cover';
 import { ShowCard } from '@/components/ShowCard';
 import { getCatalogue } from '@/lib/drive';
 
@@ -14,7 +15,7 @@ export default async function SeriesPage({ params }: { params: Promise<{ slug: s
   return (
     <>
       <section className="hero hero--series">
-        <img src={info.cover} alt="" className="hero__art" />
+        <Cover name={info.name} slug={info.slug} src={info.cover} colour={info.colour} className="hero__art" />
         <div className="hero__body">
           <p className="eyebrow">Series</p>
           <h1 className="hero__title">{info.name}</h1>

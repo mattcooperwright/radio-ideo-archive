@@ -1,8 +1,6 @@
 import { formatShowDate, parseFilename, slugify } from './parseShow';
 import type { Catalogue, Series, Show } from './types';
 
-export const DEFAULT_COVER = '/brand/default-cover.svg';
-
 export type DriveFile = {
   id: string;
   name: string;
@@ -12,7 +10,7 @@ export type DriveFile = {
   description?: string;
 };
 
-export type SeriesConfig = Record<string, { name?: string; blurb?: string; cover?: string }>;
+export type SeriesConfig = Record<string, { name?: string; blurb?: string; cover?: string; colour?: string }>;
 export type Overrides = Record<
   string,
   { title?: string; series?: string; date?: string; description?: string; hidden?: boolean }
@@ -43,7 +41,8 @@ export function buildCatalogue(files: DriveFile[], seriesConfig: SeriesConfig, o
       mimeType: f.mimeType,
       size: Number(f.size ?? 0),
       description: o.description ?? f.description ?? '',
-      cover: seriesConfig[seriesSlug]?.cover || DEFAULT_COVER,
+      cover: seriesConfig[seriesSlug]?.cover ?? '',
+      colour: seriesConfig[seriesSlug]?.colour ?? '',
     });
   }
 
@@ -60,6 +59,7 @@ export function buildCatalogue(files: DriveFile[], seriesConfig: SeriesConfig, o
         name: s.series,
         blurb: seriesConfig[s.seriesSlug]?.blurb ?? '',
         cover: s.cover,
+        colour: s.colour,
         count: 1,
       });
     }

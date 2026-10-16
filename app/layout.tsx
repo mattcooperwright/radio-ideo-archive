@@ -1,16 +1,29 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Radio IDEO',
   description: 'The Radio IDEO archive',
-  icons: { icon: '/brand/logo.svg' },
+  icons: {
+    icon: '/brand/radio-ideo-stacked-lime.png',
+    apple: '/brand/radio-ideo-stacked-lime.png',
+  },
   robots: { index: false, follow: false },
 };
+
+export const viewport: Viewport = { themeColor: '#000000' };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        {/* FH Oscar, per brand/typography.md. Manrope is the documented fallback. */}
+        <link rel="preconnect" href="https://fonts.cdnfonts.com" />
+        <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/fh-oscar-condensed-test" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" />
+      </head>
       <body>{children}</body>
     </html>
   );
