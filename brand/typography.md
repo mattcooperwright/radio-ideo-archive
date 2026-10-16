@@ -6,15 +6,18 @@ Radio IDEO uses **FH Oscar** (by Fatih Hardal, Typografische). It is also the
 typeface of the "Radio" part of the logo. Always use FH Oscar for Radio IDEO
 output; don't substitute another font in designs.
 
-Use the standard FH Oscar family only. **Ignore FH Oscar Condensed** even if
-the CDN stylesheet offers it.
+Use the standard FH Oscar family only. **Ignore FH Oscar Condensed.** The
+CDN package below is listed under the Condensed name but also contains the
+standard FH Oscar faces; those are the ones to use.
+
+Font page: https://www.cdnfonts.com/fh-oscar-condensed-test.font
 
 ## Loading it on the web
 
 Add the stylesheet from the CDN to the `<head>` of every page:
 
 ```html
-<link href="https://fonts.cdnfonts.com/css/fh-oscar-test" rel="stylesheet">
+<link href="https://fonts.cdnfonts.com/css/fh-oscar-condensed-test" rel="stylesheet">
 ```
 
 Then set the family. Manrope is the fallback for when FH Oscar fails to load:
@@ -29,8 +32,13 @@ body {
 }
 ```
 
-The CDN registers the family as `'FH Oscar Test'`, so use that exact name in
-CSS. Don't reference any family name containing "Condensed".
+Use the standard family name `'FH Oscar Test'` in CSS. Don't reference any
+family name containing "Condensed".
+
+The family name hasn't been checked against the stylesheet yet. The first
+time you build a page, open the stylesheet URL above and confirm the
+`font-family` values in its `@font-face` blocks. If the standard family is
+registered under a different name, use that name and update this file.
 
 In React, inject the same `<link>` into `document.head` once (for example in a
 `useEffect`) before rendering text, or add it to `public/index.html`.

@@ -10,6 +10,7 @@ logo.
 ## Typography
 
 The brand typeface is FH Oscar, loaded from
-`https://fonts.cdnfonts.com/css/fh-oscar-test` with the CSS family
-`'FH Oscar Test', 'Manrope', sans-serif`. Do not use FH Oscar Condensed.
+`https://fonts.cdnfonts.com/css/fh-oscar-condensed-test` with the CSS family
+`'FH Oscar Test', 'Manrope', sans-serif`. That package also contains
+FH Oscar Condensed: do not use the Condensed faces.
 Read `brand/typography.md` before setting any type.
