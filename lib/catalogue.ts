@@ -1,4 +1,4 @@
-import { formatShowDate, parseFilename, slugify } from './parseShow';
+import { formatShowDate, parseFilename, slugify, stripExtension } from './parseShow';
 import type { Catalogue, Series, Show } from './types';
 
 export type DriveFile = {
@@ -11,16 +11,28 @@ export type DriveFile = {
 };
 
 export type SeriesConfig = Record<string, { name?: string; blurb?: string; cover?: string; colour?: string }>;
+/**
+ * Keyed by Drive file ID, or by filename without its extension. A filename key lets a show be set up
+ * before its file exists, e.g. an audio copy of a video. `file` is a reminder of which file an ID means.
+ */
 export type Overrides = Record<
   string,
-  { title?: string; series?: string; date?: string; description?: string; hidden?: boolean; serato?: string | false }
+  {
+    file?: string;
+    title?: string;
+    series?: string;
+    date?: string;
+    description?: string;
+    hidden?: boolean;
+    serato?: string | false;
+  }
 >;
 
 export function buildCatalogue(files: DriveFile[], seriesConfig: SeriesConfig, overrides: Overrides): Catalogue {
   const shows: Show[] = [];
 
   for (const f of files) {
-    const o = overrides[f.id] ?? {};
+    const o = overrides[f.id] ?? overrides[stripExtension(f.name)] ?? {};
     if (o.hidden) continue;
 
     const parsed = parseFilename(f.name);
@@ -43,7 +55,8 @@ export function buildCatalogue(files: DriveFile[], seriesConfig: SeriesConfig, o
       description: o.description ?? f.description ?? '',
       cover: seriesConfig[seriesSlug]?.cover ?? '',
       colour: seriesConfig[seriesSlug]?.colour ?? '',
-      dated: Boolean(o.date || parsed.date),
+      // Only a known start time counts: Serato track offsets are measured from it.
+      dated: o.date ? /T\d/.test(o.date) : Boolean(parsed.date),
       serato: o.serato ?? null,
     });
   }

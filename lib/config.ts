@@ -5,10 +5,10 @@ export const ALLOWED_DOMAIN = 'ideo.com';
 export const ROOT_FOLDER_ID = process.env.ROOT_FOLDER_ID ?? '';
 
 /**
- * Sub-folders of the root that are published. Anything not matching (e.g. "Super Secret")
- * is never listed or streamed.
+ * Sub-folders of the root that are published. Anything not matching (e.g. "Super Secret" or
+ * "Mixcloud Visuals") is never listed or streamed.
  */
-export const FOLDER_ALLOWLIST: RegExp[] = [/^\d{4} Archive$/, /^Past Shows$/];
+export const FOLDER_ALLOWLIST: RegExp[] = [/^\d{4} (Archive|Shows)$/, /^Past Shows$/, /DJ Internet Mixes$/];
 
 /** How long the Drive listing is cached. New uploads appear within this window. */
 export const CATALOGUE_TTL_SECONDS = 600;
