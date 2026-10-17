@@ -25,7 +25,7 @@ const fetchPlaylist = unstable_cache(
       return null;
     }
   },
-  ['serato-playlist-v1'],
+  ['serato-playlist-v2'],
   { revalidate: SETLIST_TTL_SECONDS },
 );
 
