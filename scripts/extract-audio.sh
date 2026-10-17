@@ -5,11 +5,14 @@
 # Run it in Google Cloud Shell (https://shell.cloud.google.com), signed in as someone
 # who can edit the Radio IDEO folder:
 #
-#   curl -fsSL https://raw.githubusercontent.com/mattcooperwright/radio-ideo-archive/main/scripts/extract-audio.sh | bash
+#   curl -fsSLO https://raw.githubusercontent.com/mattcooperwright/radio-ideo-archive/main/scripts/extract-audio.sh && bash extract-audio.sh
 #
 # It is safe to run again: a show whose .m4a already exists in its folder is skipped.
 
 set -uo pipefail
+
+# Everything runs inside main, called on the last line, so bash has read the whole script
+# before any command can swallow part of it (apt-get does, when the script is piped in).
 
 # Drive file ID | folder ID | name for the audio copy
 SHOWS=(
@@ -32,18 +35,9 @@ SHOWS=(
 API=https://www.googleapis.com/drive/v3
 UPLOAD=https://www.googleapis.com/upload/drive/v3
 
-if ! command -v ffmpeg >/dev/null; then
-  echo "Installing ffmpeg..."
-  sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null || { echo "Couldn't install ffmpeg."; exit 1; }
-fi
+token() { gcloud auth print-access-token </dev/null 2>/dev/null; }
 
-token() { gcloud auth print-access-token 2>/dev/null; }
-
-# Cloud Shell's built-in sign-in can't reach Drive, so ask for a sign-in that can.
-if ! curl -fsS -o /dev/null -H "Authorization: Bearer $(token)" "$API/about?fields=user"; then
-  echo "Signing in with Google Drive access. Follow the link, approve, and paste the code back here."
-  gcloud auth login --enable-gdrive-access --brief </dev/tty || { echo "Sign-in failed."; exit 1; }
-fi
+drive_ok() { curl -fsS -o /dev/null -H "Authorization: Bearer $(token)" "$API/about?fields=user" </dev/null 2>/dev/null; }
 
 # Is there already a file with this name in this folder?
 exists() {
@@ -90,6 +84,25 @@ upload() {
   curl -fsS -o /dev/null -X PUT -H "Content-Type: audio/x-m4a" --upload-file "$file" "$session"
 }
 
+main() {
+if ! command -v ffmpeg >/dev/null; then
+  echo "Installing ffmpeg..."
+  { sudo apt-get update -qq && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ffmpeg >/dev/null; } </dev/null ||
+    { echo "Couldn't install ffmpeg."; exit 1; }
+fi
+
+# Cloud Shell's built-in sign-in can't reach Drive, so ask for a sign-in that can.
+if ! drive_ok; then
+  echo "Signing in with Google Drive access. Follow the link, approve, and paste the code back here."
+  gcloud auth login --enable-gdrive-access --brief </dev/tty || { echo "Sign-in failed."; exit 1; }
+fi
+if ! drive_ok; then
+  echo "Signed in, but Google Drive still refuses access. Nothing has been changed."
+  echo "Account in use: $(gcloud config get-value account </dev/null 2>/dev/null)"
+  exit 1
+fi
+echo "Drive access OK as $(gcloud config get-value account </dev/null 2>/dev/null)."
+
 work=$(mktemp -d)
 trap 'rm -rf "$work"' EXIT
 done_n=0 skipped=0 failed=()
@@ -124,3 +137,6 @@ echo
 echo "Saved $done_n, skipped $skipped (already there), failed ${#failed[@]}."
 for f in "${failed[@]}"; do echo "  failed: $f"; done
 echo "New shows appear on the site within ten minutes."
+}
+
+main "$@"
