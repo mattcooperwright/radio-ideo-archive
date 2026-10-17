@@ -10,7 +10,7 @@ export function ShowCard({ show }: { show: Show }) {
     <article className="card">
       <Link href={`/shows/${show.id}`} className="card__link">
         <div className="card__art">
-          <Cover name={show.series} slug={show.seriesSlug} src={show.cover} colour={show.colour} />
+          <Cover name={show.series} slug={show.seriesSlug} src={show.cover} colour={show.colour} tone={show.tone} />
           <NowPlaying id={show.id} />
           <PlayButton show={show} />
         </div>

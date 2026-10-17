@@ -14,6 +14,8 @@ export type Show = {
   cover: string;
   /** Brand colourway for the generated cover: lime, white, grey or black. */
   colour: string;
+  /** Position within its series, oldest first. Picks this show's tone within the series colourway. */
+  tone: number;
   /** True when the date (and start time) came from the filename or an override, not Drive's upload time. */
   dated: boolean;
   /** Serato playlist override: a URL forces one, false turns it off, null means look it up by date. */

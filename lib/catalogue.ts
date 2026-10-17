@@ -55,6 +55,7 @@ export function buildCatalogue(files: DriveFile[], seriesConfig: SeriesConfig, o
       description: o.description ?? f.description ?? '',
       cover: seriesConfig[seriesSlug]?.cover ?? '',
       colour: seriesConfig[seriesSlug]?.colour ?? '',
+      tone: 0,
       // Only a known start time counts: Serato track offsets are measured from it.
       dated: o.date ? /T\d/.test(o.date) : Boolean(parsed.date),
       serato: o.serato ?? null,
@@ -62,6 +63,14 @@ export function buildCatalogue(files: DriveFile[], seriesConfig: SeriesConfig, o
   }
 
   shows.sort((a, b) => b.date.localeCompare(a.date));
+
+  // Number each series oldest first, so a new show takes the next tone and older ones keep theirs.
+  const counts = new Map<string, number>();
+  for (const s of [...shows].reverse()) {
+    const n = counts.get(s.seriesSlug) ?? 0;
+    s.tone = n;
+    counts.set(s.seriesSlug, n + 1);
+  }
 
   const bySlug = new Map<string, Series>();
   for (const s of shows) {

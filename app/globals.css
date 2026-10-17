@@ -55,26 +55,31 @@ button { font: inherit; cursor: pointer; }
   .header__logo img { height: 24px; }
 }
 
-.main { padding: 40px var(--gutter) calc(var(--player-h) + 56px); max-width: 1280px; margin: 0 auto; }
+.main { position: relative; z-index: 1; padding: 40px var(--gutter) calc(var(--player-h) + 56px); max-width: 1280px; margin: 0 auto; }
+
+/* Background broadcast rings, behind everything */
+.broadcast { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
 
 /* Cover art: real image or a tile in the style of the stacked lockup */
 .cover { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: var(--radius); }
 /* The tile is the size container; its inner box scales with it. */
 div.cover { container-type: inline-size; overflow: hidden; }
 .cover__inner {
-  height: 100%; display: flex; flex-direction: column; justify-content: center; gap: 9cqw;
-  padding: 0 14cqw;
+  height: 100%; display: flex; flex-direction: column; justify-content: center; gap: 6cqw;
+  padding: 0 8cqw;
 }
+/* Capped so bigger cards get more room around the name rather than a bigger name. */
 .cover__name {
-  font-weight: 700; font-size: 17cqw; line-height: 0.95; letter-spacing: -0.02em;
+  font-weight: 700; font-size: min(17cqw, 34px); line-height: 0.95; letter-spacing: -0.02em;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
   overflow-wrap: anywhere;
 }
-.cover__glyphs { width: 72cqw; height: auto; }
-.cover--lime { background: var(--lime); color: var(--black); }
-.cover--white { background: var(--white); color: var(--black); }
-.cover--grey { background: var(--grey); color: var(--black); }
-.cover--black { background: var(--black); color: var(--lime); box-shadow: inset 0 0 0 1px var(--color-line); }
+.cover__glyphs { width: 38cqw; height: auto; }
+/* Cover.tsx sets --cover-bg and --cover-ink per show: one tone within the series' colourway. */
+.cover--lime { background: var(--cover-bg, var(--lime)); color: var(--cover-ink, var(--black)); }
+.cover--white { background: var(--cover-bg, var(--white)); color: var(--cover-ink, var(--black)); }
+.cover--grey { background: var(--cover-bg, var(--grey)); color: var(--cover-ink, var(--black)); }
+.cover--black { background: var(--cover-bg, var(--black)); color: var(--cover-ink, var(--lime)); box-shadow: inset 0 0 0 1px var(--color-line); }
 
 /* Hero */
 .hero { display: grid; grid-template-columns: minmax(160px, 300px) 1fr; gap: clamp(24px, 4vw, 56px); align-items: end; margin-bottom: 64px; }
@@ -119,7 +124,7 @@ div.cover { container-type: inline-size; overflow: hidden; }
 .chip[aria-pressed='true'] { background: var(--lime); color: var(--black); border-color: var(--lime); font-weight: 700; }
 
 /* Grid of cards */
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 32px 20px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr)); gap: 40px 24px; }
 .card__link { display: block; }
 .card__link:hover { color: inherit; }
 .card__link:hover .card__title { color: var(--color-accent); }

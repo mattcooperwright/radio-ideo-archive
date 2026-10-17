@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { BroadcastField } from '@/components/BroadcastField';
 import { PlayerBar } from '@/components/PlayerBar';
 import { PlayerProvider } from '@/components/PlayerProvider';
 import { SignOut } from '@/components/SignOut';
@@ -8,6 +9,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
   const user = await requireUser();
   return (
     <PlayerProvider>
+      <BroadcastField />
       <header className="header">
         <Link href="/" className="header__logo" aria-label="Radio IDEO home">
           <img src="/brand/radio-ideo-wordmark-white.svg" alt="Radio IDEO" width="430" height="92" />
