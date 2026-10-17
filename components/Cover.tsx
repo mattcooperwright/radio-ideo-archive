@@ -1,9 +1,13 @@
 import type { CSSProperties } from 'react';
+import { neonArt } from '@/lib/neonArt';
 import { Glyphs } from './Icons';
 
 // Brand palette pairs from brand/logo/README.md. Picked per series so each one is recognisable.
-export const COLOURWAYS = ['lime', 'white', 'grey', 'black'] as const;
+const BRAND_COLOURWAYS = ['lime', 'white', 'grey', 'black'] as const;
+// Neon is only used when a series asks for it, never picked by the hash below.
+export const COLOURWAYS = [...BRAND_COLOURWAYS, 'neon'] as const;
 export type Colourway = (typeof COLOURWAYS)[number];
+type BrandColourway = (typeof BRAND_COLOURWAYS)[number];
 
 const LIME = '#d9ff00';
 const WHITE = '#ffffff';
@@ -16,7 +20,7 @@ const BLACK = '#000000';
  * shows read as different. Lime stays in the neon range, white and grey stay pale or grey, and
  * black keeps its dark tile but rotates the ink through the brand colours.
  */
-const TONES: Record<Colourway, { bg: string; ink: string }[]> = {
+const TONES: Record<BrandColourway, { bg: string; ink: string }[]> = {
   lime: [LIME, '#b4ff24', '#eeff1a', '#c4ff0a', '#e4ff5c', '#a8f000'].map((bg) => ({ bg, ink: BLACK })),
   white: [WHITE, '#f3ffb8', '#ededed', '#faffe0', '#e3e3e3'].map((bg) => ({ bg, ink: BLACK })),
   grey: [GREY, '#b3b3b3', '#ebebeb', '#a6a6a6', '#c6c6c6', '#e0e0e0'].map((bg) => ({ bg, ink: BLACK })),
@@ -33,7 +37,7 @@ function colourway(slug: string, preferred?: string): Colourway {
   if (COLOURWAYS.includes(preferred as Colourway)) return preferred as Colourway;
   let h = 2166136261; // FNV-1a
   for (const c of slug) h = Math.imul(h ^ c.charCodeAt(0), 16777619);
-  return COLOURWAYS[(h >>> 0) % COLOURWAYS.length];
+  return BRAND_COLOURWAYS[(h >>> 0) % BRAND_COLOURWAYS.length];
 }
 
 /**
@@ -58,8 +62,7 @@ export function Cover({
 }) {
   if (src) return <img src={src} alt="" className={`cover ${className}`} loading="lazy" />;
   const way = colourway(slug, colour);
-  const tones = TONES[way];
-  const { bg, ink } = tones[tone % tones.length];
+  const { bg, ink } = way === 'neon' ? neonArt(tone) : TONES[way][tone % TONES[way].length];
   const style = { '--cover-bg': bg, '--cover-ink': ink } as CSSProperties;
   return (
     <div className={`cover cover--${way} ${className}`} style={style} aria-hidden="true">
