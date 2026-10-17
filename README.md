@@ -2,6 +2,8 @@
 
 A small private site where anyone with an `@ideo.com` Google account can sign in and listen back to old Radio IDEO shows. Shows are read straight from the **Radio IDEO** folder in Google Drive, so publishing a new episode means dropping the file into this year's archive folder. It appears on the site within ten minutes.
 
+**Live site:** https://radio-ideo-archive--radio-ideo-archive.europe-west4.hosted.app
+
 ## How it works
 
 - **Sign-in**: Google sign-in through Firebase Authentication. The server only issues a session if the account's email is verified and ends in `@ideo.com`; everyone else is turned away. Sessions last 14 days in an httpOnly cookie.
