@@ -15,7 +15,7 @@ Keyed by series slug: the series name lowercased with spaces and punctuation rem
 }
 ```
 
-`cover` points at a file under `public/`. Leave it empty to use a generated cover: the series name over the IDEO glyphs, in the series' `colour` (`lime`, `white`, `grey` or `black`). A new series with no entry gets a colour picked from its name.
+`cover` points at a file under `public/`. Leave it empty to use a generated cover: the series name over the IDEO glyphs, in the series' `colour` (`lime`, `white`, `grey` or `black`). Each show takes its own shade within that colour. `neon` gives every show a different pairing of two neons (lime, pink, blue, yellow, orange, green, violet) and a layout, so no two covers match until a series passes 168 shows. A new series with no entry gets a colour picked from its name.
 
 ## overrides.json
 

@@ -79,6 +79,7 @@ div.cover { container-type: inline-size; overflow: hidden; }
 .cover--lime { background: var(--cover-bg, var(--lime)); color: var(--cover-ink, var(--black)); }
 .cover--white { background: var(--cover-bg, var(--white)); color: var(--cover-ink, var(--black)); }
 .cover--grey { background: var(--cover-bg, var(--grey)); color: var(--cover-ink, var(--black)); }
+.cover--neon { background: var(--cover-bg, var(--lime)); color: var(--cover-ink, var(--black)); }
 .cover--black { background: var(--cover-bg, var(--black)); color: var(--cover-ink, var(--lime)); box-shadow: inset 0 0 0 1px var(--color-line); }
 
 /* Hero */
@@ -180,7 +181,7 @@ div.cover { container-type: inline-size; overflow: hidden; }
 .player__meta { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .player__meta > span { display: flex; flex-direction: column; min-width: 0; }
 .player__cover { width: 56px; height: 56px; flex: none; }
-.player__cover.cover--lime { box-shadow: inset 0 0 0 1.5px var(--black); }
+.player__cover.cover--lime, .player__cover.cover--neon { box-shadow: inset 0 0 0 1.5px var(--black); }
 .player__title, .player__series { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .player__title { font-weight: 700; font-size: 15px; }
 .player__series { font-size: 14px; }
