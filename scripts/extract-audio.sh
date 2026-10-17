@@ -54,23 +54,31 @@ PY
     python3 -c 'import json,sys; sys.exit(0 if json.load(sys.stdin)["files"] else 1)'
 }
 
-# ffmpeg can exit cleanly having written nothing, so check the result has at least a minute of sound.
-has_audio() {
-  local secs
-  secs=$(ffprobe -v error -select_streams a:0 -show_entries format=duration -of csv=p=0 "$1" 2>/dev/null)
-  python3 -c 'import sys; sys.exit(0 if float(sys.argv[1] or 0) >= 60 else 1)' "${secs:-0}" 2>/dev/null
+duration() { ffprobe -v error -show_entries format=duration -of csv=p=0 "$@" </dev/null 2>/dev/null; }
+
+# ffmpeg can exit cleanly having written nothing, or only part of a show if the download drops,
+# so the copy must have at least a minute of sound and, when the video's length is known, nearly all of it.
+complete() {
+  python3 -c '
+import sys
+def num(s):
+    try: return float(s)
+    except ValueError: return 0.0
+got, want = num(sys.argv[1]), num(sys.argv[2])
+sys.exit(0 if got >= 60 and (want == 0 or got >= want * 0.98) else 1)' "$(duration "$1")" "$2"
 }
 
 extract() {
-  local id=$1 out=$2 src="$API/files/$1?alt=media&supportsAllDrives=true"
+  local id=$1 out=$2 src="$API/files/$1?alt=media&supportsAllDrives=true" want
+  want=$(duration -headers "Authorization: Bearer $(token)"$'\r\n' "$src")
   # Copy the audio track as it is. If it isn't AAC (which .m4a needs), convert it instead.
   ffmpeg -nostdin -hide_banner -loglevel error -stats -y \
     -headers "Authorization: Bearer $(token)"$'\r\n' -i "$src" \
-    -map 0:a:0 -vn -c:a copy -movflags +faststart "$out" && has_audio "$out" && return 0
+    -map 0:a:0 -vn -c:a copy -movflags +faststart "$out" && complete "$out" "$want" && return 0
   echo "   copying didn't work, converting to AAC instead"
   ffmpeg -nostdin -hide_banner -loglevel error -stats -y \
     -headers "Authorization: Bearer $(token)"$'\r\n' -i "$src" \
-    -map 0:a:0 -vn -c:a aac -b:a 192k -movflags +faststart "$out" && has_audio "$out"
+    -map 0:a:0 -vn -c:a aac -b:a 192k -movflags +faststart "$out" && complete "$out" "$want"
 }
 
 upload() {
@@ -81,7 +89,8 @@ upload() {
     -H "X-Upload-Content-Type: audio/x-m4a" -d "$meta" \
     "$UPLOAD/files?uploadType=resumable&supportsAllDrives=true" | tr -d '\r' | awk 'tolower($1)=="location:" {print $2}')
   [ -n "$session" ] || return 1
-  curl -fsS -o /dev/null -X PUT -H "Content-Type: audio/x-m4a" --upload-file "$file" "$session"
+  curl -fsS -o /dev/null -X PUT -H "Authorization: Bearer $(token)" -H "Content-Type: audio/x-m4a" \
+    --upload-file "$file" "$session"
 }
 
 main() {
