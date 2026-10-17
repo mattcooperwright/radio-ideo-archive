@@ -3,8 +3,10 @@ import { notFound } from 'next/navigation';
 import { Cover } from '@/components/Cover';
 import { PlayButton } from '@/components/PlayButton';
 import { ShowCard } from '@/components/ShowCard';
+import { Tracklist } from '@/components/Tracklist';
 import { getCatalogue } from '@/lib/drive';
 import { formatShowDate } from '@/lib/parseShow';
+import { getSetlist } from '@/lib/serato';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,6 +16,7 @@ export default async function ShowPage({ params }: { params: Promise<{ id: strin
   const show = shows.find((s) => s.id === id);
   if (!show) notFound();
 
+  const setlist = await getSetlist(show, shows);
   const more = shows.filter((s) => s.seriesSlug === show.seriesSlug && s.id !== show.id).slice(0, 8);
 
   return (
@@ -39,6 +42,7 @@ export default async function ShowPage({ params }: { params: Promise<{ id: strin
           <p>{show.description}</p>
         </section>
       )}
+      {setlist && <Tracklist show={show} tracks={setlist.tracks} url={setlist.url} />}
       {more.length > 0 && (
         <>
           <h2 className="section-title">More {show.series}</h2>

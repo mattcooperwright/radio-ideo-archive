@@ -10,6 +10,8 @@ type PlayerState = {
   duration: number;
   rate: number;
   play: (show: Show) => void;
+  /** Play a show from a position in seconds, e.g. a track in its set list. */
+  playAt: (show: Show, seconds: number) => void;
   toggle: () => void;
   seek: (t: number) => void;
   skip: (delta: number) => void;
@@ -44,11 +46,11 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   const pendingSeek = useRef<number | null>(null);
   const autoplay = useRef(false);
 
-  const load = useCallback((show: Show, start: boolean) => {
+  const load = useCallback((show: Show, start: boolean, from?: number) => {
     const audio = audioRef.current;
     if (!audio) return;
-    const saved = Number(readStore(posKey(show.id)) ?? 0);
-    pendingSeek.current = saved > 5 ? saved : null;
+    const saved = from ?? Number(readStore(posKey(show.id)) ?? 0);
+    pendingSeek.current = from != null || saved > 5 ? saved : null;
     autoplay.current = start;
     setCurrent(show);
     setTime(saved);
@@ -76,6 +78,21 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         return;
       }
       load(show, true);
+    },
+    [current, load],
+  );
+
+  const playAt = useCallback(
+    (show: Show, seconds: number) => {
+      const audio = audioRef.current;
+      if (!audio) return;
+      if (current?.id === show.id && audio.readyState > 0) {
+        audio.currentTime = seconds;
+        setTime(seconds);
+        void audio.play();
+        return;
+      }
+      load(show, true, seconds);
     },
     [current, load],
   );
@@ -120,7 +137,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   const lastSaved = useRef(0);
 
   return (
-    <PlayerContext.Provider value={{ current, playing, time, duration, rate, play, toggle, seek, skip, setRate }}>
+    <PlayerContext.Provider value={{ current, playing, time, duration, rate, play, playAt, toggle, seek, skip, setRate }}>
       {children}
       <audio
         ref={audioRef}

@@ -13,7 +13,7 @@ export type DriveFile = {
 export type SeriesConfig = Record<string, { name?: string; blurb?: string; cover?: string; colour?: string }>;
 export type Overrides = Record<
   string,
-  { title?: string; series?: string; date?: string; description?: string; hidden?: boolean }
+  { title?: string; series?: string; date?: string; description?: string; hidden?: boolean; serato?: string | false }
 >;
 
 export function buildCatalogue(files: DriveFile[], seriesConfig: SeriesConfig, overrides: Overrides): Catalogue {
@@ -43,6 +43,8 @@ export function buildCatalogue(files: DriveFile[], seriesConfig: SeriesConfig, o
       description: o.description ?? f.description ?? '',
       cover: seriesConfig[seriesSlug]?.cover ?? '',
       colour: seriesConfig[seriesSlug]?.colour ?? '',
+      dated: Boolean(o.date || parsed.date),
+      serato: o.serato ?? null,
     });
   }
 

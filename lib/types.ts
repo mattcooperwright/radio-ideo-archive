@@ -14,6 +14,10 @@ export type Show = {
   cover: string;
   /** Brand colourway for the generated cover: lime, white, grey or black. */
   colour: string;
+  /** True when the date (and start time) came from the filename or an override, not Drive's upload time. */
+  dated: boolean;
+  /** Serato playlist override: a URL forces one, false turns it off, null means look it up by date. */
+  serato: string | false | null;
 };
 
 export type Series = {

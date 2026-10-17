@@ -17,6 +17,12 @@ describe('buildCatalogue', () => {
     expect(cat.years).toEqual([2026, 2022]);
   });
 
+  it('marks which shows have a real recording time and carries Serato overrides', () => {
+    const cat = buildCatalogue(files, {}, { a: { serato: false } });
+    expect(cat.shows.find((s) => s.id === 'a')).toMatchObject({ dated: true, serato: false });
+    expect(cat.shows.find((s) => s.id === 'b')).toMatchObject({ dated: false, serato: null });
+  });
+
   it('applies overrides and hides files', () => {
     const cat = buildCatalogue(files, {}, { a: { hidden: true }, c: { title: 'Big one', date: '2026-01-01' } });
     expect(cat.shows.map((s) => s.id)).toEqual(['c', 'b']);

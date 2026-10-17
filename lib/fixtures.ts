@@ -44,3 +44,17 @@ export function mockAudio(id: string, seconds = 90): Buffer {
   }
   return buf;
 }
+
+/** A Serato-style page for the mock 16 Jun 2026 night, shared by the ShuffleMode and In the Zone shows. */
+export const mockSeratoNight = '2026-06-16';
+export const mockSeratoHtml = `<div class="playlist-tracks">${[
+  ['9:13:20 PM', 'Khruangbin - Maria También'],
+  ['9:16:45 PM', 'Floating Points - LesAlpx'],
+  ['9:22:10 PM', 'Jamie xx - Gosh'],
+  ['9:27:30 PM', 'Little Simz - Gorilla'],
+  ['10:56:05 PM', 'Brian Eno - An Ending (Ascent)'],
+  ['10:57:20 PM', 'Nils Frahm - Says'],
+  ['10:58:10 PM', 'Bonobo - Kerala'],
+]
+  .map(([t, n]) => `<div class="playlist-track"><div class="playlist-tracktime">${t}</div><div class="playlist-trackname">${n}</div></div>`)
+  .join('')}</div>`;

@@ -27,8 +27,11 @@ Keyed by Google Drive file ID (the long string in the file's share URL). Every f
   "series": "ShuffleMode",
   "date": "2026-07-22",
   "description": "Notes here win over the Drive description.",
-  "hidden": true
+  "hidden": true,
+  "serato": "https://serato.com/playlists/id:12790432/09-06-2026"
 }
 ```
+
+`serato` points a show at a specific Serato playlist when the date doesn't match on its own (older shows, or a set that ran past midnight). Set it to `false` to hide a tracklist.
 
 The simplest place for show notes is the file's **Description** in Google Drive (right-click → File information → Details). The site picks it up within ten minutes.

@@ -13,6 +13,12 @@ export const FOLDER_ALLOWLIST: RegExp[] = [/^\d{4} Archive$/, /^Past Shows$/];
 /** How long the Drive listing is cached. New uploads appear within this window. */
 export const CATALOGUE_TTL_SECONDS = 600;
 
+/** Matt's public Serato profile. Playlists are looked up at serato.com/playlists/<profile>/<DD-MM-YYYY>. */
+export const SERATO_PROFILE = process.env.SERATO_PROFILE ?? 'id:12790432';
+
+/** How long a Serato lookup is cached, found or not. A newly published playlist shows up within this window. */
+export const SETLIST_TTL_SECONDS = 1800;
+
 export const SESSION_COOKIE = '__session';
 export const SESSION_MAX_AGE_MS = 14 * 24 * 60 * 60 * 1000;
 
