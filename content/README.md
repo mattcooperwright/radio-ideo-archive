@@ -19,7 +19,7 @@ Keyed by series slug: the series name lowercased with spaces and punctuation rem
 
 ## overrides.json
 
-Keyed by Google Drive file ID (the long string in the file's share URL). Every field is optional.
+Keyed by Google Drive file ID (the long string in the file's share URL), or by the filename without its extension. A filename key works before the file exists, which is how the audio copies of the video shows are set up. Every field is optional; `file` is only a reminder of which file an ID belongs to.
 
 ```json
 "1yAH2u9IkH029rSGCfhpA51vTJwS7Jzcv": {
@@ -31,6 +31,8 @@ Keyed by Google Drive file ID (the long string in the file's share URL). Every f
   "serato": "https://serato.com/playlists/id:12790432/09-06-2026"
 }
 ```
+
+A `date` without a time (`"2022-10-14"`) puts the show in the right place but doesn't look up a Serato tracklist, because track times can't be lined up without knowing when the show started. Add a time (`"2022-10-14T21:00:00Z"`) or a `serato` link to get one.
 
 `serato` points a show at a specific Serato playlist when the date doesn't match on its own (older shows, or a set that ran past midnight). Set it to `false` to hide a tracklist.
 

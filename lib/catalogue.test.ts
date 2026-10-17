@@ -28,4 +28,20 @@ describe('buildCatalogue', () => {
     expect(cat.shows.map((s) => s.id)).toEqual(['c', 'b']);
     expect(cat.shows[0]).toMatchObject({ title: 'Big one', date: '2026-01-01T00:00:00.000Z' });
   });
+
+  it('matches overrides by filename when there is no ID entry', () => {
+    const cat = buildCatalogue(files, {}, {
+      'Radio IDEO - Shuffle Mode - October 2022': { title: 'October 2022', date: '2022-10-14' },
+      c: { title: 'By ID' },
+      'FRIDAY SHOW - 2026-07-24 21-47-44': { title: 'By name' },
+    });
+    expect(cat.shows.find((s) => s.id === 'b')).toMatchObject({ title: 'October 2022', date: '2022-10-14T00:00:00.000Z' });
+    expect(cat.shows.find((s) => s.id === 'c')).toMatchObject({ title: 'By ID' });
+  });
+
+  it('treats an override date without a time as undated for tracklist timing', () => {
+    const cat = buildCatalogue(files, {}, { b: { date: '2022-10-14' }, c: { date: '2026-07-24T21:47:44Z' } });
+    expect(cat.shows.find((s) => s.id === 'b')).toMatchObject({ dated: false });
+    expect(cat.shows.find((s) => s.id === 'c')).toMatchObject({ dated: true });
+  });
 });
