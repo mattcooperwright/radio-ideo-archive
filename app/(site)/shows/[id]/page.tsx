@@ -22,7 +22,7 @@ export default async function ShowPage({ params }: { params: Promise<{ id: strin
   return (
     <>
       <section className="hero">
-        <Cover name={show.series} slug={show.seriesSlug} src={show.cover} colour={show.colour} className="hero__art" />
+        <Cover name={show.series} slug={show.seriesSlug} src={show.cover} colour={show.colour} tone={show.tone} className="hero__art" />
         <div className="hero__body">
           <p className="eyebrow">
             <Link href={`/series/${show.seriesSlug}`}>{show.series}</Link>

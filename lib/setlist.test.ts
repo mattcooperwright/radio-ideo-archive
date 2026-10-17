@@ -17,7 +17,7 @@ const hms = (h: number, m: number, s = 0) => h * 3600 + m * 60 + s;
 
 const show = (id: string, date: string, dated = true): Show => ({
   id, date, dated, title: '', titleIsDate: true, series: '', seriesSlug: '', year: 2026,
-  mimeType: '', size: 0, description: '', cover: '', colour: '', serato: null,
+  mimeType: '', size: 0, description: '', cover: '', colour: '', tone: 0, serato: null,
 });
 
 describe('playlistUrls', () => {

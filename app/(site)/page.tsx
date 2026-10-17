@@ -15,7 +15,7 @@ export default async function Home() {
     <>
       {latest && (
         <section className="hero">
-          <Cover name={latest.series} slug={latest.seriesSlug} src={latest.cover} colour={latest.colour} className="hero__art" />
+          <Cover name={latest.series} slug={latest.seriesSlug} src={latest.cover} colour={latest.colour} tone={latest.tone} className="hero__art" />
           <div className="hero__body">
             <p className="eyebrow">Latest show</p>
             <h1 className="hero__title">

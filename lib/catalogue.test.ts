@@ -44,4 +44,13 @@ describe('buildCatalogue', () => {
     expect(cat.shows.find((s) => s.id === 'b')).toMatchObject({ dated: false });
     expect(cat.shows.find((s) => s.id === 'c')).toMatchObject({ dated: true });
   });
+
+  it('numbers shows within each series oldest first, so tones stay put as shows are added', () => {
+    const cat = buildCatalogue(files, {}, {});
+    expect(cat.shows.map((s) => [s.id, s.tone])).toEqual([['c', 0], ['a', 1], ['b', 0]]);
+    const newer = { ...files[0], id: 'd', name: 'ShuffleMode - 2026-08-19 21-00-00.m4a' };
+    const more = buildCatalogue([...files, newer], {}, {});
+    expect(more.shows.find((s) => s.id === 'd')?.tone).toBe(2);
+    expect(more.shows.find((s) => s.id === 'a')?.tone).toBe(1);
+  });
 });

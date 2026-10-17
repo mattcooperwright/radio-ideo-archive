@@ -18,7 +18,7 @@ export function PlayerBar() {
     <div className="player" role="region" aria-label="Player">
       <div className="player__inner">
         <Link href={`/shows/${current.id}`} className="player__meta">
-          <Cover name={current.series} slug={current.seriesSlug} src={current.cover} colour={current.colour} className="player__cover" />
+          <Cover name={current.series} slug={current.seriesSlug} src={current.cover} colour={current.colour} tone={current.tone} className="player__cover" />
           <span>
             <span className="player__title">{current.title}</span>
             <span className="player__series">{current.series}</span>
