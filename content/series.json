@@ -1,0 +1,26 @@
+{
+  "shufflemode": {
+    "name": "ShuffleMode",
+    "blurb": "",
+    "cover": "",
+    "colour": "lime"
+  },
+  "inthezone": {
+    "name": "In the Zone",
+    "blurb": "",
+    "cover": "",
+    "colour": "white"
+  },
+  "fridayshow": {
+    "name": "Friday Show",
+    "blurb": "",
+    "cover": "",
+    "colour": "grey"
+  },
+  "radioideo": {
+    "name": "Radio IDEO",
+    "blurb": "",
+    "cover": "",
+    "colour": "black"
+  }
+}
