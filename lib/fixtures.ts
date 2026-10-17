@@ -45,16 +45,24 @@ export function mockAudio(id: string, seconds = 90): Buffer {
   return buf;
 }
 
-/** A Serato-style page for the mock 16 Jun 2026 night, shared by the ShuffleMode and In the Zone shows. */
+/**
+ * A page in serato.com's real format (see fixtures-data/serato-09-06-2026.html) for the mock 16 Jun 2026 night,
+ * shared by the ShuffleMode (21:12:58) and In the Zone (22:55:01) shows. Times are elapsed since the session
+ * started; some rows carry a clock stamp.
+ */
 export const mockSeratoNight = '2026-06-16';
-export const mockSeratoHtml = `<div class="playlist-tracks">${[
-  ['9:13:20 PM', 'Khruangbin - Maria También'],
-  ['9:16:45 PM', 'Floating Points - LesAlpx'],
-  ['9:22:10 PM', 'Jamie xx - Gosh'],
-  ['9:27:30 PM', 'Little Simz - Gorilla'],
-  ['10:56:05 PM', 'Brian Eno - An Ending (Ascent)'],
-  ['10:57:20 PM', 'Nils Frahm - Says'],
-  ['10:58:10 PM', 'Bonobo - Kerala'],
+export const mockSeratoHtml = `<div id="playlist_tracklist">${[
+  ['9:12pm', '00:00:00', 'Khruangbin - Maria Tambi&eacute;n'],
+  ['', '00:01:00', 'Floating Points - LesAlpx'],
+  ['', '00:01:30', 'Jamie xx - Gosh'],
+  ['', '00:20:00', 'Little Simz - Gorilla'],
+  ['10:00pm', '00:48:10', 'Bonobo - Kerala'],
+  ['', '01:43:20', 'Brian Eno - An Ending (Ascent)'],
+  ['', '01:43:50', 'Nils Frahm - Says'],
 ]
-  .map(([t, n]) => `<div class="playlist-track"><div class="playlist-tracktime">${t}</div><div class="playlist-trackname">${n}</div></div>`)
+  .map(
+    ([stamp, t, n]) =>
+      `<div class="playlist-track ">${stamp ? `<div class="playlist-timestamp">${stamp}</div>` : ''}` +
+      `<div class="playlist-tracktime">${t}</div><div class="playlist-trackname">${n}</div></div>`,
+  )
   .join('')}</div>`;
