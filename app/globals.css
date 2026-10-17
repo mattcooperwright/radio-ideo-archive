@@ -246,3 +246,29 @@ button.tracklist__row:hover .tracklist__play, button.tracklist__row:focus-visibl
 .tracklist li.is-now .tracklist__num { color: var(--color-accent); }
 .tracklist li.is-now .tracklist__title { color: var(--color-accent); }
 .tracklist li.is-now .tracklist__play { opacity: 1; }
+
+/* Compact list of shows, e.g. "More …" on a show page. Matches the tracklist's rows. */
+.show-list { list-style: none; margin: 0; padding: 0; max-width: 760px; border-top: 1px solid var(--color-line); }
+.show-list li { border-bottom: 1px solid var(--color-line); }
+.show-row {
+  display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; align-items: center; gap: 16px;
+  padding: 12px 8px; border-radius: 2px;
+}
+.show-row:hover { background: var(--color-surface); color: inherit; }
+.show-row:hover .show-row__title { color: var(--color-accent); }
+.show-row__art { width: 64px; height: 64px; }
+/* Too small for the series name to read; the glyphs alone carry the tile. */
+.show-row__art .cover__name { display: none; }
+.show-row__art .cover__glyphs { width: 56cqw; margin: 0 auto; }
+.show-row__body { display: flex; flex-direction: column; min-width: 0; }
+.show-row__title { font-weight: 700; line-height: 1.25; overflow-wrap: anywhere; }
+.show-row__meta { font-size: 14px; color: var(--color-muted); }
+.show-row__desc { font-size: 14px; color: var(--color-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.show-row .now-playing { position: static; box-shadow: inset 0 0 0 1px var(--color-line); }
+@media (max-width: 600px) {
+  .show-row { grid-template-columns: 56px minmax(0, 1fr); gap: 12px; }
+  .show-row__art { width: 56px; height: 56px; }
+  /* The badge moves under the text; the art spans both rows so the row stays compact. */
+  .show-row:has(.now-playing) .show-row__art { grid-row: span 2; }
+  .show-row .now-playing { grid-column: 2; justify-self: start; margin-top: 4px; }
+}

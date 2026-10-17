@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Cover } from '@/components/Cover';
 import { PlayButton } from '@/components/PlayButton';
-import { ShowCard } from '@/components/ShowCard';
+import { ShowRow } from '@/components/ShowRow';
 import { Tracklist } from '@/components/Tracklist';
 import { getCatalogue } from '@/lib/drive';
 import { formatShowDate } from '@/lib/parseShow';
@@ -46,11 +46,11 @@ export default async function ShowPage({ params }: { params: Promise<{ id: strin
       {more.length > 0 && (
         <>
           <h2 className="section-title">More {show.series}</h2>
-          <div className="grid">
+          <ul className="show-list">
             {more.map((s) => (
-              <ShowCard key={s.id} show={s} />
+              <ShowRow key={s.id} show={s} />
             ))}
-          </div>
+          </ul>
         </>
       )}
     </>
