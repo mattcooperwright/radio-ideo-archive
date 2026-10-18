@@ -40,7 +40,9 @@ export default async function Home() {
           <h2 className="section-title hall__title" id="hall-title">
             <StarIcon size={22} /> Hall of Fame
           </h2>
-          <p className="hall__lede">The standout shows, from every series.</p>
+          <p className="hall__lede">
+            The standout shows, from every series. <Link href="/hall-of-fame">See them all</Link>
+          </p>
           <Carousel label="Hall of Fame">
             {hall.map((s) => (
               <div key={s.id} role="listitem" className="carousel__item">
