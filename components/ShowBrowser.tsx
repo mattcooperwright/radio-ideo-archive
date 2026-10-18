@@ -64,7 +64,7 @@ export function ShowBrowser({ shows, series, years }: { shows: Show[]; series: S
       </div>
 
       {filtered.length ? (
-        <div className="grid">
+        <div className="grid grid--compact">
           {filtered.map((s) => (
             <ShowCard key={s.id} show={s} />
           ))}

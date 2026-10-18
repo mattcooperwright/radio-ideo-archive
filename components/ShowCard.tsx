@@ -15,7 +15,7 @@ export function ShowCard({ show }: { show: Show }) {
           <NowPlaying id={show.id} />
           {show.hallOfFame && (
             <span className="hof-mark" title="Hall of Fame">
-              <StarIcon />
+              <StarIcon size={11} />
               <span className="sr-only">Hall of Fame</span>
             </span>
           )}
