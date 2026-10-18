@@ -1,4 +1,4 @@
-import type { DriveFile } from './catalogue';
+import type { DriveFile, HallEntry } from './catalogue';
 
 /** Used with DRIVE_MOCK=1. Names mirror the real Drive folder. */
 export const mockFiles: DriveFile[] = [
@@ -19,6 +19,13 @@ export const mockFiles: DriveFile[] = [
   size: '0',
   createdTime: new Date(Date.UTC(2022, 0, 1 + i)).toISOString(),
 }));
+
+/** Mock Hall of Fame shortcuts, newest induction first. */
+export const mockHall: HallEntry[] = [
+  { targetId: 'm4', addedTime: '2026-10-01T10:00:00Z' },
+  { targetId: 'm8', addedTime: '2026-09-12T10:00:00Z' },
+  { targetId: 'm3', addedTime: '2026-08-20T10:00:00Z' },
+];
 
 /** A short generated tone so the player can be exercised without Drive. */
 export function mockAudio(id: string, seconds = 90): Buffer {

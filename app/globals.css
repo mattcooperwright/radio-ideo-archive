@@ -272,3 +272,35 @@ button.tracklist__row:hover .tracklist__play, button.tracklist__row:focus-visibl
   .show-row:has(.now-playing) .show-row__art { grid-row: span 2; }
   .show-row .now-playing { grid-column: 2; justify-self: start; margin-top: 4px; }
 }
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* Hall of Fame: shortcuts in the Drive folder of that name */
+.hall { margin-bottom: 72px; }
+.hall__title { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+.hall__title svg { color: var(--lime); }
+.hall__lede { color: var(--color-muted); margin: 0 0 24px; }
+/* A small star in the art's bottom-left corner, clear of the Playing badge (top-left) and play button (top-right). */
+.hof-mark {
+  position: absolute; left: 8px; bottom: 8px;
+  width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--black); color: var(--lime);
+}
+.cover--black ~ .hof-mark { background: var(--lime); color: var(--black); }
+.show-row__thumb { position: relative; display: block; }
+.show-row__thumb .hof-mark { left: 4px; bottom: 4px; width: 16px; height: 16px; }
+
+/* The archive on the home page: smaller tiles, so the Hall of Fame above stays the feature. Two across on phones. */
+.grid--compact { grid-template-columns: repeat(auto-fill, minmax(min(180px, calc(50% - 8px)), 1fr)); gap: 28px 16px; }
+.grid--compact .card__title { font-size: 14px; margin-top: 8px; }
+.grid--compact .card__meta { font-size: 13px; }
+.grid--compact .card__art .play-btn { top: 8px; right: 8px; width: 36px; height: 36px; }
+.grid--compact .now-playing { top: 8px; left: 8px; font-size: 11px; padding: 3px 8px 3px 7px; }
+.grid--compact .hof-mark { left: 6px; bottom: 6px; width: 20px; height: 20px; }
+.eyebrows { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; }
+.eyebrow--hof { display: inline-flex; align-items: center; gap: 5px; background: var(--black); color: var(--lime); box-shadow: inset 0 0 0 1px var(--lime); }
+.chip--hof { display: inline-flex; align-items: center; gap: 6px; }
+.chip--hof svg { color: var(--lime); }
+.chip--hof[aria-pressed='true'] svg { color: var(--black); }
+/* Smaller tiles get a smaller name, so one-word series like "ShuffleMode" fit on a line. */
+.grid--compact .cover__name { font-size: 12.5cqw; }

@@ -37,3 +37,9 @@ A `date` without a time (`"2022-10-14"`) puts the show in the right place but do
 `serato` points a show at a specific Serato playlist when the date doesn't match on its own (older shows, or a set that ran past midnight). Set it to `false` to hide a tracklist.
 
 The simplest place for show notes is the file's **Description** in Google Drive (right-click → File information → Details). The site picks it up within ten minutes.
+
+## Hall of Fame
+
+The best shows, from any series, are listed in a Hall of Fame section on the home page and get a star on their cards and show pages.
+
+To add a show, find it in Drive, right-click → Organise → **Add shortcut**, and choose the **Hall of Fame** folder inside Radio IDEO. To take it out, delete the shortcut. Don't move the show itself into the folder: the site only publishes shows from the archive folders, so a moved file would disappear from the site. The newest shortcut is listed first, and changes show up within ten minutes.

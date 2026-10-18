@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { Cover } from '@/components/Cover';
+import { StarIcon } from '@/components/Icons';
 import { PlayButton } from '@/components/PlayButton';
+import { ShowCard } from '@/components/ShowCard';
 import { ShowBrowser } from '@/components/ShowBrowser';
 import { getCatalogue } from '@/lib/drive';
 import { formatShowDate } from '@/lib/parseShow';
@@ -10,6 +12,8 @@ export const dynamic = 'force-dynamic';
 export default async function Home() {
   const { shows, series, years } = await getCatalogue();
   const latest = shows[0];
+  // Most recently inducted first.
+  const hall = shows.filter((s) => s.hallOfFame).sort((a, b) => b.hallOfFame!.localeCompare(a.hallOfFame!));
 
   return (
     <>
@@ -27,6 +31,19 @@ export default async function Home() {
             </p>
             {latest.description && <p className="hero__desc">{latest.description}</p>}
             <PlayButton show={latest} size="lg" />
+          </div>
+        </section>
+      )}
+      {hall.length > 0 && (
+        <section className="hall" aria-labelledby="hall-title">
+          <h2 className="section-title hall__title" id="hall-title">
+            <StarIcon size={22} /> Hall of Fame
+          </h2>
+          <p className="hall__lede">The standout shows, from every series.</p>
+          <div className="grid">
+            {hall.map((s) => (
+              <ShowCard key={s.id} show={s} />
+            ))}
           </div>
         </section>
       )}

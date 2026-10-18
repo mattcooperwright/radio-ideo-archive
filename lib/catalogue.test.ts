@@ -53,4 +53,22 @@ describe('buildCatalogue', () => {
     expect(more.shows.find((s) => s.id === 'd')?.tone).toBe(2);
     expect(more.shows.find((s) => s.id === 'a')?.tone).toBe(1);
   });
+
+  it('marks Hall of Fame shows from shortcuts, ignoring shortcuts to files it does not publish', () => {
+    const hall = [
+      { targetId: 'a', addedTime: '2026-09-01T10:00:00Z' },
+      { targetId: 'a', addedTime: '2026-08-01T10:00:00Z' },
+      { targetId: 'c', addedTime: '2026-09-02T10:00:00Z' },
+      { targetId: 'not-a-show', addedTime: '2026-09-03T10:00:00Z' },
+    ];
+    const cat = buildCatalogue(files, {}, { c: { hidden: true } }, hall);
+    expect(cat.shows.map((s) => [s.id, s.hallOfFame])).toEqual([
+      ['a', '2026-08-01T10:00:00Z'],
+      ['b', null],
+    ]);
+  });
+
+  it('leaves every show out of the Hall of Fame when there are no shortcuts', () => {
+    expect(buildCatalogue(files, {}, {}).shows.every((s) => s.hallOfFame === null)).toBe(true);
+  });
 });

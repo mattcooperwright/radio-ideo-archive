@@ -20,6 +20,8 @@ export type Show = {
   dated: boolean;
   /** Serato playlist override: a URL forces one, false turns it off, null means look it up by date. */
   serato: string | false | null;
+  /** When the show was added to the Hall of Fame (ISO), or null if it isn't in it. */
+  hallOfFame: string | null;
 };
 
 export type Series = {

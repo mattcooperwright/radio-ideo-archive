@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Cover } from '@/components/Cover';
+import { StarIcon } from '@/components/Icons';
 import { PlayButton } from '@/components/PlayButton';
 import { ShowRow } from '@/components/ShowRow';
 import { Tracklist } from '@/components/Tracklist';
@@ -24,8 +25,15 @@ export default async function ShowPage({ params }: { params: Promise<{ id: strin
       <section className="hero">
         <Cover name={show.series} slug={show.seriesSlug} src={show.cover} colour={show.colour} tone={show.tone} className="hero__art" />
         <div className="hero__body">
-          <p className="eyebrow">
-            <Link href={`/series/${show.seriesSlug}`}>{show.series}</Link>
+          <p className="eyebrows">
+            <span className="eyebrow">
+              <Link href={`/series/${show.seriesSlug}`}>{show.series}</Link>
+            </span>
+            {show.hallOfFame && (
+              <span className="eyebrow eyebrow--hof">
+                <StarIcon size={12} /> Hall of Fame
+              </span>
+            )}
           </p>
           <h1 className="hero__title">{show.title}</h1>
           {!show.titleIsDate && (
