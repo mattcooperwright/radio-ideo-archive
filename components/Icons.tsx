@@ -42,6 +42,21 @@ export function Glyphs({ className }: { className?: string }) {
   );
 }
 
+/** Hall of Fame mark: a five-point star with the same small rounded corners as the logo's glyphs. */
+export function StarIcon({ size = 14 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M12 2.2l2.95 6.3 6.85.8-5.07 4.7 1.35 6.8L12 17.4l-6.08 3.4 1.35-6.8L2.2 9.3l6.85-.8z"
+        fill="currentColor"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function SkipIcon({ dir, size = 22 }: { dir: 'back' | 'fwd'; size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">

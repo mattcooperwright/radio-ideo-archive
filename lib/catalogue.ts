@@ -10,6 +10,9 @@ export type DriveFile = {
   description?: string;
 };
 
+/** A shortcut in the Hall of Fame folder: the show it points at and when it was added. */
+export type HallEntry = { targetId: string; addedTime: string };
+
 export type SeriesConfig = Record<string, { name?: string; blurb?: string; cover?: string; colour?: string }>;
 /**
  * Keyed by Drive file ID, or by filename without its extension. A filename key lets a show be set up
@@ -28,8 +31,19 @@ export type Overrides = Record<
   }
 >;
 
-export function buildCatalogue(files: DriveFile[], seriesConfig: SeriesConfig, overrides: Overrides): Catalogue {
+export function buildCatalogue(
+  files: DriveFile[],
+  seriesConfig: SeriesConfig,
+  overrides: Overrides,
+  hall: HallEntry[] = [],
+): Catalogue {
   const shows: Show[] = [];
+  // A show with more than one shortcut counts from the first.
+  const inducted = new Map<string, string>();
+  for (const h of hall) {
+    const prev = inducted.get(h.targetId);
+    if (!prev || h.addedTime < prev) inducted.set(h.targetId, h.addedTime);
+  }
 
   for (const f of files) {
     const o = overrides[f.id] ?? overrides[stripExtension(f.name)] ?? {};
@@ -59,6 +73,7 @@ export function buildCatalogue(files: DriveFile[], seriesConfig: SeriesConfig, o
       // Only a known start time counts: Serato track offsets are measured from it.
       dated: o.date ? /T\d/.test(o.date) : Boolean(parsed.date),
       serato: o.serato ?? null,
+      hallOfFame: inducted.get(f.id) ?? null,
     });
   }
 

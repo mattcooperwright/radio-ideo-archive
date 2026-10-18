@@ -10,6 +10,12 @@ export const ROOT_FOLDER_ID = process.env.ROOT_FOLDER_ID ?? '';
  */
 export const FOLDER_ALLOWLIST: RegExp[] = [/^\d{4} (Archive|Shows)$/, /^Past Shows$/, /DJ Internet Mixes$/];
 
+/**
+ * The folder of shortcuts to the best shows, from any series. It is read for its shortcuts only and
+ * is deliberately not in FOLDER_ALLOWLIST, so nothing in it becomes a show of its own.
+ */
+export const HALL_OF_FAME_FOLDER = /^hall of fame$/i;
+
 /** How long the Drive listing is cached. New uploads appear within this window. */
 export const CATALOGUE_TTL_SECONDS = 600;
 

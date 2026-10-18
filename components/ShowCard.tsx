@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { formatShowDate } from '@/lib/parseShow';
 import type { Show } from '@/lib/types';
 import { Cover } from './Cover';
+import { StarIcon } from './Icons';
 import { NowPlaying } from './NowPlaying';
 import { PlayButton } from './PlayButton';
 
@@ -12,6 +13,12 @@ export function ShowCard({ show }: { show: Show }) {
         <div className="card__art">
           <Cover name={show.series} slug={show.seriesSlug} src={show.cover} colour={show.colour} tone={show.tone} />
           <NowPlaying id={show.id} />
+          {show.hallOfFame && (
+            <span className="hof-mark" title="Hall of Fame">
+              <StarIcon />
+              <span className="sr-only">Hall of Fame</span>
+            </span>
+          )}
           <PlayButton show={show} />
         </div>
         <h3 className="card__title">{show.title}</h3>
