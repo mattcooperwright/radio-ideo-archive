@@ -25,6 +25,10 @@ export const mockHall: HallEntry[] = [
   { targetId: 'm4', addedTime: '2026-10-01T10:00:00Z' },
   { targetId: 'm8', addedTime: '2026-09-12T10:00:00Z' },
   { targetId: 'm3', addedTime: '2026-08-20T10:00:00Z' },
+  { targetId: 'm1', addedTime: '2026-08-02T10:00:00Z' },
+  { targetId: 'm7', addedTime: '2026-07-15T10:00:00Z' },
+  { targetId: 'm9', addedTime: '2026-06-30T10:00:00Z' },
+  { targetId: 'm5', addedTime: '2026-06-01T10:00:00Z' },
 ];
 
 /** A short generated tone so the player can be exercised without Drive. */

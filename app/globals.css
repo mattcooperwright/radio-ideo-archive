@@ -276,7 +276,7 @@ button.tracklist__row:hover .tracklist__play, button.tracklist__row:focus-visibl
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 /* Hall of Fame: shortcuts in the Drive folder of that name */
-.hall { margin-bottom: 72px; }
+.hall { position: relative; margin-bottom: 72px; }
 .hall__title { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
 .hall__title svg { color: var(--lime); }
 .hall__lede { color: var(--color-muted); margin: 0 0 24px; }
@@ -304,3 +304,31 @@ button.tracklist__row:hover .tracklist__play, button.tracklist__row:focus-visibl
 .chip--hof[aria-pressed='true'] svg { color: var(--black); }
 /* Smaller tiles get a smaller name, so one-word series like "ShuffleMode" fit on a line. */
 .grid--compact .cover__name { font-size: 12.5cqw; }
+
+/* Sideways-scrolling row (the Hall of Fame). Tiles stay smaller than the latest show's art above. */
+.carousel__nav { position: absolute; top: 0; right: 0; display: flex; gap: 8px; }
+.carousel__btn {
+  width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center;
+  background: transparent; color: var(--color-ink); border: 1px solid var(--color-line);
+}
+.carousel__btn:hover:not(:disabled) { border-color: var(--lime); color: var(--lime); }
+.carousel__btn:disabled { opacity: 0.3; cursor: default; }
+.carousel__track {
+  display: grid; grid-auto-flow: column; grid-auto-columns: 220px; gap: 20px;
+  overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  /* Run to the page edge so tiles slide off-screen rather than stopping at the gutter. */
+  margin-inline: calc(-1 * var(--gutter)); padding: 0 var(--gutter) 4px; scroll-padding-inline: var(--gutter);
+}
+.carousel__track::-webkit-scrollbar { display: none; }
+.carousel__item { scroll-snap-align: start; min-width: 0; }
+.carousel .card__title { font-size: 15px; margin-top: 10px; }
+.carousel .card__meta { font-size: 13px; }
+.carousel .cover__name { font-size: 12.5cqw; }
+/* Touch screens swipe; the buttons are for mouse and keyboard. */
+@media (hover: none) { .carousel__nav { display: none; } }
+@media (max-width: 640px) {
+  .carousel__track { grid-auto-columns: 160px; gap: 14px; }
+  .carousel .card__art .play-btn { top: 8px; right: 8px; width: 36px; height: 36px; }
+  .carousel .now-playing { top: 8px; left: 8px; font-size: 11px; padding: 3px 8px 3px 7px; }
+}

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Carousel } from '@/components/Carousel';
 import { Cover } from '@/components/Cover';
 import { StarIcon } from '@/components/Icons';
 import { PlayButton } from '@/components/PlayButton';
@@ -40,11 +41,13 @@ export default async function Home() {
             <StarIcon size={22} /> Hall of Fame
           </h2>
           <p className="hall__lede">The standout shows, from every series.</p>
-          <div className="grid">
+          <Carousel label="Hall of Fame">
             {hall.map((s) => (
-              <ShowCard key={s.id} show={s} />
+              <div key={s.id} role="listitem" className="carousel__item">
+                <ShowCard show={s} />
+              </div>
             ))}
-          </div>
+          </Carousel>
         </section>
       )}
       <h2 className="section-title">The archive</h2>
