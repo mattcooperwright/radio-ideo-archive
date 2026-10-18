@@ -276,7 +276,7 @@ button.tracklist__row:hover .tracklist__play, button.tracklist__row:focus-visibl
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 /* Hall of Fame: shortcuts in the Drive folder of that name */
-.hall { margin-bottom: 72px; }
+.hall { position: relative; margin-bottom: 72px; }
 .hall__title { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
 .hall__title svg { color: var(--lime); }
 .hall__lede { color: var(--color-muted); margin: 0 0 24px; }
@@ -304,3 +304,75 @@ button.tracklist__row:hover .tracklist__play, button.tracklist__row:focus-visibl
 .chip--hof[aria-pressed='true'] svg { color: var(--black); }
 /* Smaller tiles get a smaller name, so one-word series like "ShuffleMode" fit on a line. */
 .grid--compact .cover__name { font-size: 12.5cqw; }
+
+/* Sideways-scrolling row (the Hall of Fame). Tiles stay smaller than the latest show's art above. */
+.carousel__nav { position: absolute; top: 0; right: 0; display: flex; gap: 8px; }
+.carousel__btn {
+  width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center;
+  background: transparent; color: var(--color-ink); border: 1px solid var(--color-line);
+}
+.carousel__btn:hover:not(:disabled) { border-color: var(--lime); color: var(--lime); }
+.carousel__btn:disabled { opacity: 0.3; cursor: default; }
+.carousel__track {
+  display: grid; grid-auto-flow: column; grid-auto-columns: 220px; gap: 20px;
+  overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  /* Run to the page edge so tiles slide off-screen rather than stopping at the gutter. */
+  margin-inline: calc(-1 * var(--gutter)); padding: 0 var(--gutter) 4px; scroll-padding-inline: var(--gutter);
+}
+.carousel__track::-webkit-scrollbar { display: none; }
+.carousel__item { scroll-snap-align: start; min-width: 0; }
+.carousel .card__title { font-size: 15px; margin-top: 10px; }
+.carousel .card__meta { font-size: 13px; }
+.carousel .cover__name { font-size: 12.5cqw; }
+/* Touch screens swipe; the buttons are for mouse and keyboard. */
+@media (hover: none) { .carousel__nav { display: none; } }
+@media (max-width: 640px) {
+  .carousel__track { grid-auto-columns: 160px; gap: 14px; }
+  .carousel .card__art .play-btn { top: 8px; right: 8px; width: 36px; height: 36px; }
+  .carousel .now-playing { top: 8px; left: 8px; font-size: 11px; padding: 3px 8px 3px 7px; }
+}
+
+/* Hall of Fame page: the site's white theme. Tokens are redefined on body so the header and page follow. */
+.logo--on-light { display: none; }
+.header__link { display: inline-flex; align-items: center; gap: 6px; color: var(--color-ink); font-weight: 700; }
+.header__link svg { color: var(--lime); }
+.hall__lede a { color: var(--color-ink); text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+.hall__lede a:hover { color: var(--color-accent); }
+
+body:has(.hof-page) {
+  --color-bg: var(--white);
+  --color-ink: var(--black);
+  --color-muted: rgb(0 0 0 / 0.62);
+  --color-line: rgb(0 0 0 / 0.14);
+  --color-surface: #f2f2f2;
+  /* Lime text is unreadable on white, so links and play buttons go black. */
+  --color-accent: var(--black);
+  --color-accent-ink: var(--lime);
+}
+body:has(.hof-page) .broadcast { display: none; }
+body:has(.hof-page) .logo--on-dark { display: none; }
+body:has(.hof-page) .logo--on-light { display: block; }
+body:has(.hof-page) .header__link svg { color: var(--black); }
+body:has(.hof-page) a:hover { text-decoration: underline; text-underline-offset: 3px; }
+body:has(.hof-page) .card__link:hover { text-decoration: none; }
+body:has(.hof-page) .card__link:hover .card__title { text-decoration: underline; text-underline-offset: 3px; }
+/* Pale covers need an edge on white. */
+.hof-page .cover--white, .hof-page .cover--grey, .hof-page .cover--lime, .hof-page .cover--neon { box-shadow: inset 0 0 0 1px var(--color-line); }
+
+.hof-page__head { margin-bottom: 48px; }
+.hof-page__title {
+  display: flex; align-items: center; gap: 16px;
+  font-weight: 700; font-size: clamp(44px, 7vw, 96px); line-height: 0.95; letter-spacing: -0.025em; margin: 0 0 16px;
+}
+.hof-page__title svg { flex: none; width: 0.7em; height: 0.7em; }
+.hof-page__lede { font-size: 20px; margin: 0 0 4px; }
+.hof-page__count { color: var(--color-muted); margin: 0; }
+@media (max-width: 640px) {
+  .hof-page__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 14px; }
+  .hof-page__grid .card__title { font-size: 14px; margin-top: 8px; }
+  .hof-page__grid .card__meta { font-size: 13px; }
+  .hof-page__grid .card__art .play-btn { top: 8px; right: 8px; width: 36px; height: 36px; }
+  .hof-page__grid .now-playing { top: 8px; left: 8px; font-size: 11px; padding: 3px 8px 3px 7px; }
+  .hof-page__grid .cover__name { font-size: 12.5cqw; }
+}

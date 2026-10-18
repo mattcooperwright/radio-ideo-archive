@@ -30,9 +30,9 @@ export default async function ShowPage({ params }: { params: Promise<{ id: strin
               <Link href={`/series/${show.seriesSlug}`}>{show.series}</Link>
             </span>
             {show.hallOfFame && (
-              <span className="eyebrow eyebrow--hof">
+              <Link href="/hall-of-fame" className="eyebrow eyebrow--hof">
                 <StarIcon size={12} /> Hall of Fame
-              </span>
+              </Link>
             )}
           </p>
           <h1 className="hero__title">{show.title}</h1>
