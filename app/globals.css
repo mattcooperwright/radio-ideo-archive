@@ -80,6 +80,13 @@ div.cover { container-type: inline-size; overflow: hidden; }
 .cover--white { background: var(--cover-bg, var(--white)); color: var(--cover-ink, var(--black)); }
 .cover--grey { background: var(--cover-bg, var(--grey)); color: var(--cover-ink, var(--black)); }
 .cover--neon { background: var(--cover-bg, var(--lime)); color: var(--cover-ink, var(--black)); }
+.cover--dots { background: var(--cover-bg, #161616); color: var(--cover-ink, var(--white)); box-shadow: inset 0 0 0 1px var(--color-line); }
+/* A dot grid under the name and glyphs; pitch and dot size scale with the tile. */
+.cover--dots .cover__inner {
+  background-image: radial-gradient(circle at center, var(--cover-dot, #4d4d4d) var(--cover-dot-r, 2cqw), transparent calc(var(--cover-dot-r, 2cqw) + 0.4px));
+  background-size: 8cqw 8cqw;
+  background-position: center;
+}
 .cover--black { background: var(--cover-bg, var(--black)); color: var(--cover-ink, var(--lime)); box-shadow: inset 0 0 0 1px var(--color-line); }
 
 /* Hero */
@@ -222,7 +229,7 @@ div.cover { container-type: inline-size; overflow: hidden; }
 .google-btn:disabled { opacity: .6; cursor: progress; }
 
 /* Black covers take the lime button so it doesn't disappear into the tile */
-.card__art .cover--black ~ .play-btn { background: var(--lime); color: var(--black); }
+.card__art .cover--black ~ .play-btn, .card__art .cover--dots ~ .play-btn { background: var(--lime); color: var(--black); }
 
 /* Tracklist from Serato */
 .tracklist { max-width: 760px; margin-bottom: 56px; }
@@ -286,7 +293,7 @@ button.tracklist__row:hover .tracklist__play, button.tracklist__row:focus-visibl
   width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center;
   background: var(--black); color: var(--lime);
 }
-.cover--black ~ .hof-mark { background: var(--lime); color: var(--black); }
+.cover--black ~ .hof-mark, .cover--dots ~ .hof-mark { background: var(--lime); color: var(--black); }
 .show-row__thumb { position: relative; display: block; }
 .show-row__thumb .hof-mark { left: 4px; bottom: 4px; width: 16px; height: 16px; }
 
