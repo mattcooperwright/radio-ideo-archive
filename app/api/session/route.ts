@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { MOCK_AUTH, SESSION_COOKIE, SESSION_MAX_AGE_MS } from '@/lib/config';
-import { isAllowedEmail } from '@/lib/email';
+import { canAccess } from '@/lib/access';
 import { adminAuth } from '@/lib/firebaseAdmin';
 import { MOCK_SESSION_VALUE } from '@/lib/auth';
 
@@ -31,8 +31,8 @@ export async function POST(req: Request) {
 
   try {
     const decoded = await adminAuth().verifyIdToken(body.idToken, true);
-    if (!isAllowedEmail(decoded.email, decoded.email_verified)) {
-      return NextResponse.json({ error: 'domain' }, { status: 403 });
+    if (!(await canAccess(decoded.email, decoded.email_verified))) {
+      return NextResponse.json({ error: 'not_invited' }, { status: 403 });
     }
     // Only accept tokens from a sign-in that just happened.
     if (Date.now() / 1000 - decoded.auth_time > 5 * 60) {

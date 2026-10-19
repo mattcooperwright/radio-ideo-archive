@@ -376,3 +376,23 @@ body:has(.hof-page) .card__link:hover .card__title { text-decoration: underline;
   .hof-page__grid .now-playing { top: 8px; left: 8px; font-size: 11px; padding: 3px 8px 3px 7px; }
   .hof-page__grid .cover__name { font-size: 12.5cqw; }
 }
+
+/* Listening stats (admin only) */
+.stats { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 15px; }
+.stats th, .stats td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--color-line, rgba(128, 128, 128, 0.3)); }
+.stats th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-muted); }
+.stats td:nth-child(3), .stats td:nth-child(4), .stats th:nth-child(3), .stats th:nth-child(4) { text-align: right; }
+
+/* Email-link sign-in for guests */
+.email-form { margin-top: 28px; text-align: left; font-size: 14px; font-weight: 500; }
+.email-form__row { display: flex; gap: 8px; margin-top: 8px; }
+.email-form input { flex: 1; min-width: 0; padding: 12px 14px; border-radius: 999px; border: 2px solid var(--black); background: transparent; color: var(--black); font: inherit; }
+.email-form input::placeholder { color: rgb(0 0 0 / 0.55); }
+.email-form button { padding: 12px 20px; border-radius: 999px; border: 0; background: var(--black); color: var(--white); font: inherit; font-weight: 700; }
+.email-form button:disabled { opacity: .6; cursor: progress; }
+.login__note { margin-top: 28px; font-weight: 500; }
+
+/* Invite list (admin only) */
+.invite-form { display: flex; gap: 8px; margin: 20px 0 8px; max-width: 480px; }
+.invite-form input { flex: 1; min-width: 0; padding: 10px 14px; border-radius: 999px; border: 1px solid var(--color-line); background: var(--color-surface); color: var(--color-ink); font: inherit; }
+.invite-form button { padding: 10px 20px; border-radius: 999px; border: 0; background: var(--color-accent); color: var(--color-accent-ink); font: inherit; font-weight: 700; }
