@@ -35,15 +35,15 @@ const TONES: Record<BrandColourway, { bg: string; ink: string }[]> = {
 
 /**
  * Dot-matrix tiles for In the Zone, echoing the dot-matrix lettering of the show's visuals.
- * Dark greys only, so the lime play button and the white ink always have room. Each step changes
- * the dot's grey and size, so neighbouring shows are easy to tell apart.
+ * Near-black tiles with light grey dots; the brighter the dots, the smaller they are, so the white
+ * ink still reads over them. Each step changes the dot's grey and size, so neighbouring shows are easy to tell apart.
  */
 const DOT_TONES = [
-  { bg: '#161616', dot: '#4d4d4d', r: '1.6cqw', ink: WHITE },
-  { bg: '#262626', dot: '#6b6b6b', r: '2.2cqw', ink: WHITE },
-  { bg: '#0d0d0d', dot: '#383838', r: '2.1cqw', ink: GREY },
-  { bg: '#1f1f1f', dot: '#5c5c5c', r: '2.5cqw', ink: WHITE },
-  { bg: '#2e2e2e', dot: '#707070', r: '1.9cqw', ink: WHITE },
+  { bg: '#0d0d0d', dot: '#8c8c8c', r: '1.4cqw', ink: WHITE },
+  { bg: '#1a1a1a', dot: '#b3b3b3', r: '1.2cqw', ink: WHITE },
+  { bg: '#000000', dot: '#737373', r: '1.9cqw', ink: WHITE },
+  { bg: '#141414', dot: '#999999', r: '1.6cqw', ink: WHITE },
+  { bg: '#222222', dot: '#c4c4c4', r: '1.1cqw', ink: WHITE },
 ];
 
 function colourway(slug: string, preferred?: string): Colourway {
