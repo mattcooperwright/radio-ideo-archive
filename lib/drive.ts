@@ -78,7 +78,7 @@ export const getCatalogue: () => Promise<Catalogue> = unstable_cache(
     const { files, hall } = await fetchDrive();
     return buildCatalogue(files, seriesConfig as SeriesConfig, overrides as Overrides, hall);
   },
-  ['catalogue-v6'],
+  ['catalogue-v7'],
   { revalidate: CATALOGUE_TTL_SECONDS },
 );
 
