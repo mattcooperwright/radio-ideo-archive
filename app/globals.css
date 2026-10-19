@@ -376,3 +376,9 @@ body:has(.hof-page) .card__link:hover .card__title { text-decoration: underline;
   .hof-page__grid .now-playing { top: 8px; left: 8px; font-size: 11px; padding: 3px 8px 3px 7px; }
   .hof-page__grid .cover__name { font-size: 12.5cqw; }
 }
+
+/* Listening stats (admin only) */
+.stats { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 15px; }
+.stats th, .stats td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--color-line, rgba(128, 128, 128, 0.3)); }
+.stats th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-muted); }
+.stats td:nth-child(3), .stats td:nth-child(4), .stats th:nth-child(3), .stats th:nth-child(4) { text-align: right; }

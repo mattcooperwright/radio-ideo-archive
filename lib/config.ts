@@ -1,6 +1,18 @@
 /** Only Google accounts on this domain can sign in. */
 export const ALLOWED_DOMAIN = 'ideo.com';
 
+/** The public address of the site, used to turn the share image path into the absolute URL Slack needs. */
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://radio-ideo-archive--radio-ideo-archive.europe-west4.hosted.app';
+
+/** Signed-in users who can see listening stats at /stats. Comma-separated emails in ADMIN_EMAILS. */
+export const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? 'mcooper@ideo.com')
+  .split(',')
+  .map((e) => e.trim().toLowerCase())
+  .filter(Boolean);
+
+/** Seconds of actual listening before a show counts as played. Stops a mis-click or a skim counting. */
+export const PLAY_THRESHOLD_SECONDS = 30;
+
 /** The "Radio IDEO" folder in Drive. Shared (Viewer) with the app's service account. */
 export const ROOT_FOLDER_ID = process.env.ROOT_FOLDER_ID ?? '';
 

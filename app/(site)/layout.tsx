@@ -5,6 +5,7 @@ import { PlayerBar } from '@/components/PlayerBar';
 import { PlayerProvider } from '@/components/PlayerProvider';
 import { SignOut } from '@/components/SignOut';
 import { requireUser } from '@/lib/auth';
+import { isAdmin } from '@/lib/plays';
 
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
   const user = await requireUser();
@@ -20,6 +21,11 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
           <Link href="/hall-of-fame" className="header__link">
             <StarIcon size={13} /> Hall of Fame
           </Link>
+          {isAdmin(user.email) && (
+            <Link href="/stats" className="header__link">
+              Stats
+            </Link>
+          )}
           <span className="header__email">{user.email}</span>
           <SignOut />
         </div>

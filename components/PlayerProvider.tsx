@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
+import { PLAY_THRESHOLD_SECONDS } from '@/lib/config';
 import type { Show } from '@/lib/types';
 
 type PlayerState = {
@@ -45,6 +46,10 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   const [rate, setRateState] = useState(1);
   const pendingSeek = useRef<number | null>(null);
   const autoplay = useRef(false);
+  // Seconds actually listened to the loaded show, and whether that has been reported as a play yet.
+  const listened = useRef(0);
+  const lastTick = useRef<number | null>(null);
+  const reported = useRef(false);
 
   const load = useCallback((show: Show, start: boolean, from?: number) => {
     const audio = audioRef.current;
@@ -52,6 +57,9 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     const saved = from ?? Number(readStore(posKey(show.id)) ?? 0);
     pendingSeek.current = from != null || saved > 5 ? saved : null;
     autoplay.current = start;
+    listened.current = 0;
+    lastTick.current = null;
+    reported.current = false;
     setCurrent(show);
     setTime(saved);
     setDuration(0);
@@ -154,6 +162,19 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         onTimeUpdate={(e) => {
           const t = e.currentTarget.currentTime;
           setTime(t);
+          // Count real listening only: a jump from seeking is far bigger than one tick of playback.
+          if (lastTick.current != null && t > lastTick.current && t - lastTick.current < 2) listened.current += t - lastTick.current;
+          lastTick.current = t;
+          if (current && !reported.current && listened.current >= PLAY_THRESHOLD_SECONDS) {
+            reported.current = true;
+            // Fire and forget: stats must never get in the way of playback.
+            void fetch('/api/plays', {
+              method: 'POST',
+              headers: { 'content-type': 'application/json' },
+              body: JSON.stringify({ showId: current.id }),
+              keepalive: true,
+            }).catch(() => {});
+          }
           if (current && Math.abs(t - lastSaved.current) > 5) {
             lastSaved.current = t;
             writeStore(posKey(current.id), String(Math.floor(t)));
