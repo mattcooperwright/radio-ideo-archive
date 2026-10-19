@@ -4,8 +4,8 @@ import { Glyphs } from './Icons';
 
 // Brand palette pairs from brand/logo/README.md. Picked per series so each one is recognisable.
 const BRAND_COLOURWAYS = ['lime', 'white', 'grey', 'black'] as const;
-// Neon is only used when a series asks for it, never picked by the hash below.
-export const COLOURWAYS = [...BRAND_COLOURWAYS, 'neon'] as const;
+// Neon and dots are only used when a series asks for them, never picked by the hash below.
+export const COLOURWAYS = [...BRAND_COLOURWAYS, 'neon', 'dots'] as const;
 export type Colourway = (typeof COLOURWAYS)[number];
 type BrandColourway = (typeof BRAND_COLOURWAYS)[number];
 
@@ -32,6 +32,19 @@ const TONES: Record<BrandColourway, { bg: string; ink: string }[]> = {
     { bg: '#141414', ink: WHITE },
   ],
 };
+
+/**
+ * Dot-matrix tiles for In the Zone, echoing the dot-matrix lettering of the show's visuals.
+ * Near-black tiles with light grey dots; the brighter the dots, the smaller they are, so the white
+ * ink still reads over them. Each step changes the dot's grey and size, so neighbouring shows are easy to tell apart.
+ */
+const DOT_TONES = [
+  { bg: '#0d0d0d', dot: '#8c8c8c', r: '1.4cqw', ink: WHITE },
+  { bg: '#1a1a1a', dot: '#b3b3b3', r: '1.2cqw', ink: WHITE },
+  { bg: '#000000', dot: '#737373', r: '1.9cqw', ink: WHITE },
+  { bg: '#141414', dot: '#999999', r: '1.6cqw', ink: WHITE },
+  { bg: '#222222', dot: '#c4c4c4', r: '1.1cqw', ink: WHITE },
+];
 
 function colourway(slug: string, preferred?: string): Colourway {
   if (COLOURWAYS.includes(preferred as Colourway)) return preferred as Colourway;
@@ -62,8 +75,9 @@ export function Cover({
 }) {
   if (src) return <img src={src} alt="" className={`cover ${className}`} loading="lazy" />;
   const way = colourway(slug, colour);
-  const { bg, ink } = way === 'neon' ? neonArt(tone) : TONES[way][tone % TONES[way].length];
-  const style = { '--cover-bg': bg, '--cover-ink': ink } as CSSProperties;
+  const dots = way === 'dots' ? DOT_TONES[tone % DOT_TONES.length] : undefined;
+  const { bg, ink } = dots ?? (way === 'neon' ? neonArt(tone) : TONES[way][tone % TONES[way].length]);
+  const style = { '--cover-bg': bg, '--cover-ink': ink, ...(dots && { '--cover-dot': dots.dot, '--cover-dot-r': dots.r }) } as CSSProperties;
   return (
     <div className={`cover cover--${way} ${className}`} style={style} aria-hidden="true">
       <div className="cover__inner">
