@@ -6,3 +6,11 @@ export function isAllowedEmail(email: string | undefined | null, emailVerified: 
   if (at < 1) return false;
   return email.slice(at + 1).toLowerCase() === ALLOWED_DOMAIN;
 }
+
+export function normaliseEmail(email: string): string {
+  return email.trim().toLowerCase();
+}
+
+export function isValidEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}

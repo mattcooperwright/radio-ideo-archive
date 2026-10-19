@@ -3,23 +3,7 @@
 import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import { useState } from 'react';
 import { clientAuth } from '@/lib/firebaseClient';
-
-const MESSAGES: Record<string, string> = {
-  domain: 'Radio IDEO is for ideo.com accounts. Try again with your IDEO Google account.',
-  default: 'Sign-in didn’t work. Please try again.',
-};
-
-async function createSession(body: object) {
-  const res = await fetch('/api/session', {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) {
-    const { error } = (await res.json().catch(() => ({}))) as { error?: string };
-    throw new Error(error ?? 'default');
-  }
-}
+import { createSession, MESSAGES } from './createSession';
 
 export function LoginButton({ mock }: { mock: boolean }) {
   const [busy, setBusy] = useState(false);
@@ -34,7 +18,8 @@ export function LoginButton({ mock }: { mock: boolean }) {
       } else {
         const auth = clientAuth();
         const provider = new GoogleAuthProvider();
-        provider.setCustomParameters({ hd: 'ideo.com', prompt: 'select_account' });
+        // No hosted-domain hint: guests sign in with any Google account. The server decides who gets a session.
+        provider.setCustomParameters({ prompt: 'select_account' });
         const cred = await signInWithPopup(auth, provider);
         try {
           await createSession({ idToken: await cred.user.getIdToken() });

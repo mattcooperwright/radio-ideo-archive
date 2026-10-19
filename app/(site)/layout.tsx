@@ -22,9 +22,14 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
             <StarIcon size={13} /> Hall of Fame
           </Link>
           {isAdmin(user.email) && (
-            <Link href="/stats" className="header__link">
-              Stats
-            </Link>
+            <>
+              <Link href="/invites" className="header__link">
+                Invites
+              </Link>
+              <Link href="/stats" className="header__link">
+                Stats
+              </Link>
+            </>
           )}
           <span className="header__email">{user.email}</span>
           <SignOut />
