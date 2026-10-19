@@ -76,7 +76,8 @@ export function Cover({
   if (src) return <img src={src} alt="" className={`cover ${className}`} loading="lazy" />;
   const way = colourway(slug, colour);
   const dots = way === 'dots' ? DOT_TONES[tone % DOT_TONES.length] : undefined;
-  const { bg, ink } = dots ?? (way === 'neon' ? neonArt(tone) : TONES[way][tone % TONES[way].length]);
+  const { bg, ink } =
+    way === 'dots' ? DOT_TONES[tone % DOT_TONES.length] : way === 'neon' ? neonArt(tone) : TONES[way][tone % TONES[way].length];
   const style = { '--cover-bg': bg, '--cover-ink': ink, ...(dots && { '--cover-dot': dots.dot, '--cover-dot-r': dots.r }) } as CSSProperties;
   return (
     <div className={`cover cover--${way} ${className}`} style={style} aria-hidden="true">
