@@ -1,5 +1,5 @@
 export const MESSAGES: Record<string, string> = {
-  not_invited: 'This address hasn’t been invited to Radio IDEO. Ask whoever shared the link to add you.',
+  not_allowed: 'IDEO addresses need to use Sign in with Google.',
   default: 'Sign-in didn’t work. Please try again.',
 };
 

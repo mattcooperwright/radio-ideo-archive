@@ -31,8 +31,8 @@ export async function POST(req: Request) {
 
   try {
     const decoded = await adminAuth().verifyIdToken(body.idToken, true);
-    if (!(await canAccess(decoded.email, decoded.email_verified))) {
-      return NextResponse.json({ error: 'not_invited' }, { status: 403 });
+    if (!canAccess(decoded.email, decoded.email_verified)) {
+      return NextResponse.json({ error: 'not_allowed' }, { status: 403 });
     }
     // Only accept tokens from a sign-in that just happened.
     if (Date.now() / 1000 - decoded.auth_time > 5 * 60) {

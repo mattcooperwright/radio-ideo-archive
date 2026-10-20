@@ -23,8 +23,8 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
           </Link>
           {isAdmin(user.email) && (
             <>
-              <Link href="/invites" className="header__link">
-                Invites
+              <Link href="/guests" className="header__link">
+                Guests
               </Link>
               <Link href="/stats" className="header__link">
                 Stats

@@ -1,84 +1,51 @@
 import 'server-only';
-import { FieldValue, getFirestore, Timestamp } from 'firebase-admin/firestore';
-import { MOCK_AUTH } from './config';
-import { isAllowedEmail, normaliseEmail } from './email';
+import { ADMIN_EMAILS, ALLOWED_DOMAIN, MOCK_AUTH } from './config';
 import { adminAuth } from './firebaseAdmin';
 
-export type Invite = { email: string; addedBy: string; addedAt: Date | null };
+export type Guest = { uid: string; email: string; createdAt: Date | null; lastSignInAt: Date | null };
 
-const COLLECTION = 'invites';
-/** How long "is this address invited?" is remembered per server instance. Bounds how late a removal lands. */
-const CACHE_MS = 60_000;
-
-// Local development has no Firestore. It hangs off globalThis because Next's dev server bundles routes and pages separately.
-const mockInvites: Map<string, Invite> = ((globalThis as { __mockInvites?: Map<string, Invite> }).__mockInvites ??= new Map());
-const cache = new Map<string, { invited: boolean; at: number }>();
-
-function invites() {
-  adminAuth(); // makes sure the default Firebase app exists
-  return getFirestore().collection(COLLECTION);
-}
-
-export async function isInvited(email: string): Promise<boolean> {
-  const key = normaliseEmail(email);
-  if (MOCK_AUTH) return mockInvites.has(key);
-  const hit = cache.get(key);
-  if (hit && Date.now() - hit.at < CACHE_MS) return hit.invited;
-  const invited = (await invites().doc(key).get()).exists;
-  cache.set(key, { invited, at: Date.now() });
-  return invited;
+function isIdeoAddress(email: string): boolean {
+  return email.slice(email.lastIndexOf('@') + 1).toLowerCase() === ALLOWED_DOMAIN;
 }
 
 /**
- * Who may have a session: anyone verified on the IDEO domain, plus verified addresses on the invite list.
- * If the invite list can't be read, guests are turned away and IDEO people are unaffected.
+ * Who may have a session: anyone with an account. Guests sign up themselves, and an admin deletes the ones
+ * who shouldn't be here. IDEO and admin addresses must be verified, so nobody can sign up as one of them
+ * with a password and inherit their access.
  */
-export async function canAccess(email: string | undefined | null, emailVerified: boolean | undefined): Promise<boolean> {
-  if (isAllowedEmail(email, emailVerified)) return true;
-  if (!email || emailVerified !== true) return false;
-  try {
-    return await isInvited(email);
-  } catch (e) {
-    console.error('invite lookup failed', e);
-    return false;
-  }
+export function canAccess(email: string | undefined | null, emailVerified: boolean | undefined): boolean {
+  if (!email) return false;
+  if (emailVerified === true) return true;
+  return !isIdeoAddress(email) && !ADMIN_EMAILS.includes(email.toLowerCase());
 }
 
-export async function listInvites(): Promise<Invite[]> {
-  if (MOCK_AUTH) return [...mockInvites.values()].sort((a, b) => a.email.localeCompare(b.email));
-  const snap = await invites().get();
-  return snap.docs
-    .map((d) => {
-      const data = d.data();
-      return { email: d.id, addedBy: data.addedBy ?? '', addedAt: data.addedAt ? (data.addedAt as Timestamp).toDate() : null };
-    })
-    .sort((a, b) => a.email.localeCompare(b.email));
+/** Everyone with an account who isn't on the IDEO domain, newest first. */
+export async function listGuests(): Promise<Guest[]> {
+  if (MOCK_AUTH) return [];
+  const guests: Guest[] = [];
+  let pageToken: string | undefined;
+  do {
+    const page = await adminAuth().listUsers(1000, pageToken);
+    for (const u of page.users) {
+      if (!u.email || isIdeoAddress(u.email)) continue;
+      guests.push({
+        uid: u.uid,
+        email: u.email,
+        createdAt: u.metadata.creationTime ? new Date(u.metadata.creationTime) : null,
+        lastSignInAt: u.metadata.lastSignInTime ? new Date(u.metadata.lastSignInTime) : null,
+      });
+    }
+    pageToken = page.pageToken;
+  } while (pageToken);
+  return guests.sort((a, b) => (b.createdAt?.getTime() ?? 0) - (a.createdAt?.getTime() ?? 0));
 }
 
-export async function addInvite(email: string, addedBy: string): Promise<void> {
-  const key = normaliseEmail(email);
-  cache.delete(key);
-  if (MOCK_AUTH) {
-    mockInvites.set(key, { email: key, addedBy, addedAt: new Date() });
-    return;
+/** Deletes the account. Session checks look the user up, so their cookie stops working straight away. */
+export async function deleteGuest(uid: string): Promise<void> {
+  if (MOCK_AUTH) return;
+  const user = await adminAuth().getUser(uid);
+  if (!user.email || isIdeoAddress(user.email) || ADMIN_EMAILS.includes(user.email.toLowerCase())) {
+    throw new Error('Not a guest account');
   }
-  await invites().doc(key).set({ addedBy, addedAt: FieldValue.serverTimestamp() });
-}
-
-/** Removes the invite and signs the person out everywhere, so access ends now rather than when their cookie expires. */
-export async function removeInvite(email: string): Promise<void> {
-  const key = normaliseEmail(email);
-  cache.delete(key);
-  if (MOCK_AUTH) {
-    mockInvites.delete(key);
-    return;
-  }
-  await invites().doc(key).delete();
-  try {
-    const user = await adminAuth().getUserByEmail(key);
-    await adminAuth().revokeRefreshTokens(user.uid);
-  } catch (e) {
-    // Never signed in, so there is nothing to revoke.
-    if ((e as { code?: string }).code !== 'auth/user-not-found') throw e;
-  }
+  await adminAuth().deleteUser(uid);
 }

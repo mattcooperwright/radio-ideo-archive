@@ -20,7 +20,7 @@ export async function getUser(): Promise<User | null> {
   try {
     // checkRevoked: true so disabling a user in the Firebase console takes effect immediately.
     const claims = await adminAuth().verifySessionCookie(value, true);
-    if (!(await canAccess(claims.email, claims.email_verified))) return null;
+    if (!canAccess(claims.email, claims.email_verified)) return null;
     return { email: claims.email!, name: (claims.name as string) ?? claims.email!, picture: claims.picture };
   } catch {
     return null;
