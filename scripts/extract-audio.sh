@@ -8,6 +8,10 @@
 #   curl -fsSLO https://raw.githubusercontent.com/mattcooperwright/radio-ideo-archive/main/scripts/extract-audio.sh && bash extract-audio.sh
 #
 # It is safe to run again: a show whose .m4a already exists in its folder is skipped.
+#
+# To do only some shows, add text that must appear in the audio file's name. For the 2025 shows:
+#
+#   bash extract-audio.sh 2025-
 
 set -uo pipefail
 
@@ -118,6 +122,7 @@ done_n=0 skipped=0 failed=()
 
 for row in "${SHOWS[@]}"; do
   IFS='|' read -r id parent name <<<"$row"
+  [[ -n "${1:-}" && "$name" != *"$1"* ]] && continue
   echo
   echo "== $name"
   if exists "$name" "$parent"; then
