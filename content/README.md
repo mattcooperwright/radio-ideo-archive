@@ -28,9 +28,12 @@ Keyed by Google Drive file ID (the long string in the file's share URL), or by t
   "date": "2026-07-22",
   "description": "Notes here win over the Drive description.",
   "hidden": true,
-  "serato": "https://serato.com/playlists/id:12790432/09-06-2026"
+  "serato": "https://serato.com/playlists/id:12790432/09-06-2026",
+  "start": 300
 }
 ```
+
+`start` is a number of seconds. The show always begins playing from that point and the player won't seek earlier, which skips a silent or unwanted opening without touching the file. Tracklist times still count from the start of the audio.
 
 A `date` without a time (`"2022-10-14"`) puts the show in the right place but doesn't look up a Serato tracklist, because track times can't be lined up without knowing when the show started. Add a time (`"2022-10-14T21:00:00Z"`) or a `serato` link to get one.
 

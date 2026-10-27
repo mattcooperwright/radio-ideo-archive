@@ -23,6 +23,13 @@ describe('buildCatalogue', () => {
     expect(cat.shows.find((s) => s.id === 'b')).toMatchObject({ dated: false, serato: null });
   });
 
+  it('carries a forced start position, defaulting to the beginning', () => {
+    const cat = buildCatalogue(files, {}, { a: { start: 300 }, b: { start: -5 } });
+    expect(cat.shows.find((s) => s.id === 'a')?.startAt).toBe(300);
+    expect(cat.shows.find((s) => s.id === 'b')?.startAt).toBe(0);
+    expect(cat.shows.find((s) => s.id === 'c')?.startAt).toBe(0);
+  });
+
   it('applies overrides and hides files', () => {
     const cat = buildCatalogue(files, {}, { a: { hidden: true }, c: { title: 'Big one', date: '2026-01-01' } });
     expect(cat.shows.map((s) => s.id)).toEqual(['c', 'b']);

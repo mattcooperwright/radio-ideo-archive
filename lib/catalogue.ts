@@ -28,6 +28,8 @@ export type Overrides = Record<
     description?: string;
     hidden?: boolean;
     serato?: string | false;
+    /** Seconds into the audio where playback always begins. */
+    start?: number;
   }
 >;
 
@@ -73,6 +75,7 @@ export function buildCatalogue(
       // Only a known start time counts: Serato track offsets are measured from it.
       dated: o.date ? /T\d/.test(o.date) : Boolean(parsed.date),
       serato: o.serato ?? null,
+      startAt: Math.max(0, o.start ?? 0),
       hallOfFame: inducted.get(f.id) ?? null,
     });
   }

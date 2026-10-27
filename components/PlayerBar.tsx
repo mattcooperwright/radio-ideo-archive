@@ -12,7 +12,8 @@ export function PlayerBar() {
   const { current, playing, time, duration, rate, toggle, seek, skip, setRate } = usePlayer();
   if (!current) return null;
 
-  const pct = duration ? (time / duration) * 100 : 0;
+  const start = Math.min(current.startAt || 0, duration);
+  const pct = duration > start ? ((time - start) / (duration - start)) * 100 : 0;
 
   return (
     <div className="player" role="region" aria-label="Player">
@@ -41,10 +42,10 @@ export function PlayerBar() {
           <span className="player__time">{formatTime(time)}</span>
           <input
             type="range"
-            min={0}
+            min={start}
             max={duration || 0}
             step={1}
-            value={Math.min(time, duration || 0)}
+            value={Math.max(start, Math.min(time, duration || 0))}
             onChange={(e) => seek(Number(e.target.value))}
             aria-label="Seek"
             style={{ ['--pct' as string]: `${pct}%` }}

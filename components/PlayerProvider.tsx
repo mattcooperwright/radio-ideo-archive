@@ -54,7 +54,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   const load = useCallback((show: Show, start: boolean, from?: number) => {
     const audio = audioRef.current;
     if (!audio) return;
-    const saved = from ?? Number(readStore(posKey(show.id)) ?? 0);
+    const saved = Math.max(from ?? Number(readStore(posKey(show.id)) ?? 0), show.startAt || 0);
     pendingSeek.current = from != null || saved > 5 ? saved : null;
     autoplay.current = start;
     listened.current = 0;
@@ -95,8 +95,8 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       const audio = audioRef.current;
       if (!audio) return;
       if (current?.id === show.id && audio.readyState > 0) {
-        audio.currentTime = seconds;
-        setTime(seconds);
+        audio.currentTime = Math.max(seconds, show.startAt || 0);
+        setTime(audio.currentTime);
         void audio.play();
         return;
       }
@@ -112,12 +112,15 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     else audio.pause();
   }, [current]);
 
-  const seek = useCallback((t: number) => {
-    const audio = audioRef.current;
-    if (!audio || !Number.isFinite(t)) return;
-    audio.currentTime = Math.max(0, Math.min(t, audio.duration || t));
-    setTime(audio.currentTime);
-  }, []);
+  const seek = useCallback(
+    (t: number) => {
+      const audio = audioRef.current;
+      if (!audio || !Number.isFinite(t)) return;
+      audio.currentTime = Math.max(current?.startAt || 0, Math.min(t, audio.duration || t));
+      setTime(audio.currentTime);
+    },
+    [current],
+  );
 
   const skip = useCallback((delta: number) => seek((audioRef.current?.currentTime ?? 0) + delta), [seek]);
 
