@@ -52,6 +52,38 @@ describe('GET /api/stream/[id]', () => {
     expect(driveFetch.mock.calls[0][1].headers).toEqual({ Range: 'bytes=0-4' });
   });
 
+  it('allows four open streams per listener, refuses the fifth, and frees a slot when one closes', async () => {
+    getUser.mockResolvedValue({ email: 'scraper@example.com', name: 'S' });
+    driveFetch.mockImplementation(async () => new Response(new Uint8Array(1024), { status: 200 }));
+    const open: Response[] = [];
+    for (let i = 0; i < 4; i++) open.push(await call('abc'));
+    expect(open.map((r) => r.status)).toEqual([200, 200, 200, 200]);
+
+    const refused = await call('abc');
+    expect(refused.status).toBe(429);
+    expect(refused.headers.get('Retry-After')).toBe('5');
+    expect(driveFetch).toHaveBeenCalledTimes(4);
+
+    await open[0].body!.cancel();
+    expect((await call('abc')).status).toBe(200);
+  });
+
+  it('frees the slot when a stream is read to the end, and when Drive errors', async () => {
+    getUser.mockResolvedValue({ email: 'slow@example.com', name: 'S' });
+    for (let i = 0; i < 6; i++) {
+      driveFetch.mockResolvedValueOnce(new Response('abc', { status: 200 }));
+      await (await call('abc')).text();
+    }
+    for (let i = 0; i < 6; i++) {
+      driveFetch.mockResolvedValueOnce(new Response('nope', { status: 403 }));
+      expect((await call('abc')).status).toBe(502);
+    }
+    driveFetch.mockRejectedValueOnce(new Error('network'));
+    await expect(call('abc')).rejects.toThrow('network');
+    driveFetch.mockResolvedValueOnce(new Response('abc', { status: 200 }));
+    expect((await call('abc')).status).toBe(200);
+  });
+
   it('hides Drive error detail from the listener', async () => {
     driveFetch.mockResolvedValue(new Response('secret service account detail', { status: 403 }));
     const res = await call('abc');

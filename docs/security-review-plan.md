@@ -66,3 +66,19 @@ A short findings list ranked by severity and effort, a fix PR per group (headers
 ## What I need from you
 
 Console access or an export for the Firestore rules, Auth settings, API key restrictions and Drive sharing list, since those live outside the repo. Confirmation that a light-touch pass against the live site is acceptable. A rough idea of how many guests you expect, which decides whether Tier 3 is ever needed.
+
+## Status after the first session
+
+Done: security headers (full CSP in Report-Only), a committed deny-all `firestore.rules`, secret scan of history (clean), access and session tests for every route, `/api/plays` rate limit and de-duplication, and a cap of four concurrent streams per listener.
+
+Open, in rough priority order:
+
+- Check the live Firestore rules in the console and deploy `firestore.rules` with `firebase deploy --only firestore:rules`.
+- Restrict the Firebase Auth API key to the app's domains, confirm Email enumeration protection is on, and set a billing budget alert.
+- Test the pre-account hijack case (password account for an IDEO address, then Google sign-in) against Firebase Auth or the emulator.
+- Add Firebase App Check with reCAPTCHA on sign-up, which is the proper fix for scripted account creation.
+- Check the session at the top of each page, so a junk cookie does not start a Drive listing before the redirect.
+- Watch the CSP Report-Only violations in the browser console during a real sign-in, then enforce it.
+- Dependency advisories that need a Next 16 upgrade or a Firebase change, as a separate PR.
+- Failure-mode tests for Drive, Firestore and Serato, and a small load test.
+- Decide on the brand font hosting, and confirm the external Gmail reader on the Drive root folder.
