@@ -4,7 +4,7 @@ vi.mock('server-only', () => ({}));
 vi.mock('./firebaseAdmin', () => ({ adminAuth: () => ({}) }));
 vi.mock('firebase-admin/firestore', () => ({ FieldValue: {}, getFirestore: () => ({}), Timestamp: class {} }));
 
-import { isAdmin, summarise, type PlayEvent } from './plays';
+import { isAdmin, PLAY_DEDUPE_MS, playDocId, summarise, type PlayEvent } from './plays';
 
 const play = (showId: string, email: string, at: string): PlayEvent => ({
   showId,
@@ -37,5 +37,18 @@ describe('isAdmin', () => {
   it('matches the configured email ignoring case', () => {
     expect(isAdmin('MCooper@ideo.com')).toBe(true);
     expect(isAdmin('someone@ideo.com')).toBe(false);
+  });
+});
+
+describe('playDocId', () => {
+  const t = Date.UTC(2026, 9, 1, 10, 0, 0);
+  it('is the same for repeats inside the window, whatever the email case', () => {
+    expect(playDocId('X@ideo.com', 'a', t)).toBe(playDocId('x@ideo.com', 'a', t + 60_000));
+  });
+  it('differs by listener, show and window', () => {
+    const base = playDocId('x@ideo.com', 'a', t);
+    expect(playDocId('y@ideo.com', 'a', t)).not.toBe(base);
+    expect(playDocId('x@ideo.com', 'b', t)).not.toBe(base);
+    expect(playDocId('x@ideo.com', 'a', t + PLAY_DEDUPE_MS)).not.toBe(base);
   });
 });

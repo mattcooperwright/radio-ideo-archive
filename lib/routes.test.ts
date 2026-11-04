@@ -5,7 +5,7 @@ vi.mock('server-only', () => ({}));
 const getUser = vi.fn();
 const getShow = vi.fn();
 const driveFetch = vi.fn();
-const recordPlay = vi.fn();
+const recordPlay = vi.fn().mockResolvedValue(true);
 const deleteGuest = vi.fn();
 
 vi.mock('@/lib/auth', () => ({ getUser, requireUser: getUser, MOCK_SESSION_VALUE: 'x' }));
@@ -18,6 +18,7 @@ const show = { id: 'abc', title: 'T', series: 'S', mimeType: 'audio/mp4' };
 
 beforeEach(() => {
   vi.clearAllMocks();
+  recordPlay.mockResolvedValue(true);
   getUser.mockResolvedValue({ email: 'guest@example.com', name: 'G' });
   getShow.mockImplementation(async (id: string) => (id === 'abc' ? show : null));
   driveFetch.mockResolvedValue(new Response('audio', { status: 206, headers: { 'Content-Range': 'bytes 0-4/5', 'Content-Length': '5' } }));
@@ -74,6 +75,20 @@ describe('POST /api/plays', () => {
   it.each([{}, { showId: 1 }, { showId: ['abc'] }, { showId: 'nope' }, '{not json'])('rejects bad input %j', async (body) => {
     expect((await call(body)).status).toBe(404);
     expect(recordPlay).not.toHaveBeenCalled();
+  });
+
+  it('stops a script after 20 requests an hour, with Retry-After, and writes nothing more', async () => {
+    getUser.mockResolvedValue({ email: 'flood@example.com', name: 'F' });
+    const statuses: number[] = [];
+    let last: Response | undefined;
+    for (let i = 0; i < 25; i++) {
+      last = await call({ showId: 'abc' });
+      statuses.push(last.status);
+    }
+    expect(statuses.filter((s) => s === 200).length).toBe(20);
+    expect(statuses.slice(20)).toEqual([429, 429, 429, 429, 429]);
+    expect(Number(last!.headers.get('Retry-After'))).toBeGreaterThan(0);
+    expect(recordPlay).toHaveBeenCalledTimes(20);
   });
 
   it('records title, series and email from the server, ignoring anything the client sends', async () => {
