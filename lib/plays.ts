@@ -1,4 +1,5 @@
 import 'server-only';
+import { createHash } from 'node:crypto';
 import { FieldValue, getFirestore, Timestamp } from 'firebase-admin/firestore';
 import { ADMIN_EMAILS, MOCK_AUTH } from './config';
 import { adminAuth } from './firebaseAdmin';
@@ -32,12 +33,35 @@ function db() {
   return getFirestore();
 }
 
-export async function recordPlay(play: Omit<PlayEvent, 'at'>): Promise<void> {
+/** The same person playing the same show again inside this window counts once. */
+export const PLAY_DEDUPE_MS = 30 * 60 * 1000;
+
+/**
+ * The document id is a hash of listener, show and time bucket. `create` fails if it exists, so a
+ * script repeating the call writes one document, however many instances it hits. The most a listener
+ * can store is one document per show per window.
+ */
+export function playDocId(email: string, showId: string, nowMs: number): string {
+  const bucket = Math.floor(nowMs / PLAY_DEDUPE_MS);
+  return createHash('sha256').update(`${email.toLowerCase()}|${showId}|${bucket}`).digest('hex');
+}
+
+/** Returns false when the play was a repeat inside the dedupe window and nothing was stored. */
+export async function recordPlay(play: Omit<PlayEvent, 'at'>): Promise<boolean> {
   if (MOCK_AUTH) {
     mockPlays.push({ ...play, at: new Date() });
-    return;
+    return true;
   }
-  await db().collection(COLLECTION).add({ ...play, at: FieldValue.serverTimestamp() });
+  try {
+    await db()
+      .collection(COLLECTION)
+      .doc(playDocId(play.email, play.showId, Date.now()))
+      .create({ ...play, at: FieldValue.serverTimestamp() });
+    return true;
+  } catch (e) {
+    if ((e as { code?: number }).code === 6) return false; // gRPC ALREADY_EXISTS
+    throw e;
+  }
 }
 
 export async function recentPlays(): Promise<PlayEvent[]> {
